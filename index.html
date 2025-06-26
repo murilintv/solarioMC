@@ -1,115 +1,3780 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Solário MC Store</title>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
-    body { font-family: Poppins, sans-serif; margin:0; padding:0; background:#000; color:#FFD700; }
-    header { background:#000; padding:20px; text-align:center; border-bottom:2px solid #FFD700; }
-    header h1 { margin:0; color:#FFD700; font-size:2.8rem; font-weight:600; letter-spacing:2px; text-shadow:0 0 5px #FFD700; }
-    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:20px; padding:20px; }
-    .card { background:#111; border-radius:14px; overflow:hidden; box-shadow:0 5px 15px rgba(255,215,0,0.2); transition:transform .3s,box-shadow .3s; position:relative; }
-    .card:hover { transform:translateY(-6px); box-shadow:0 10px 25px rgba(255,215,0,0.5); }
-    .card img { width:100%; height:160px; object-fit:cover; filter:drop-shadow(0 0 3px #FFD700); }
-    .card-content { padding:15px; }
-    .card-title { font-size:1.3rem; margin-bottom:5px; font-weight:600; text-shadow:0 0 5px #FFD700; }
-    .card-price { font-size:1rem; color:#ccc; margin-bottom:12px; font-weight:500; }
-    .actions { display:flex; justify-content:space-between; gap:10px; }
-    .btn { padding:8px 12px; border:none; border-radius:6px; cursor:pointer; font-weight:600; font-size:0.9rem; }
-    .btn-info { background:#FFD700; color:#000; }
-    .btn-buy { background:#333; color:#FFD700; }
-    .popup { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.8); justify-content:center; align-items:center; z-index:1000; }
-    .popup-content { background:#111; padding:20px; border-radius:12px; box-shadow:0 0 15px #FFD700; max-width:400px; text-align:center; position:relative; }
-    .popup-content h2 { margin-top:0; color:#FFD700; }
-    .popup-content label, .popup-content p { color:#ccc; }
-    .popup-content input, .popup-content select { margin:8px 0; padding:8px; width:90%; border-radius:6px; border:none; background:#222; color:#fff; }
-    .popup-content button { margin-top:15px; padding:10px 20px; border:none; background:#FFD700; color:#000; border-radius:8px; font-weight:600; cursor:pointer; }
-    .close-btn { position:absolute; top:10px; right:15px; background:transparent; border:none; color:#FFD700; font-size:1.2rem; cursor:pointer; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolarioMC - Loja Premium de Minecraft</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Minecraft&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary: #FFA500;
+            --primary-dark: #FF8C00;
+            --secondary: #FFD700;
+            --cash: #4CAF50;
+            --cavaleiro: #1abc9c;
+            --guerreiro: #e67e22;
+            --lord: #9b59b6;
+            --baron: #f1c40f;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --danger: #ef4444;
+            --success: #22c55e;
+            --warning: #f59e0b;
+            --op: #ff6b6b;
+            --keys: #9b5de5;
+            --farms: #00bbf9;
+            --spawners: #00f5d4;
+            --rares: #fee440;
+            --pandora: #ff00ff;
+            --claims: #00cc66;
+            --minions: #6a89cc;
+            --powers: #f78fb3;
+            --tags: #f8c291;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0a192f, #1a3a5f);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+        }
+        
+        .minecraft-font {
+            font-family: 'Minecraft', sans-serif;
+        }
+        
+        /* Header Styles */
+        header {
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .logo {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.5);
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        nav a {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--primary);
+            transition: width 0.3s;
+            border-radius: 2px;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn {
+            padding: 0.7rem 1.8rem;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: #0a192f;
+            box-shadow: 0 4px 15px rgba(255, 165, 0, 0.4);
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 20px rgba(255, 140, 0, 0.6);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #0a192f;
+            transform: translateY(-3px);
+        }
+        
+        .cart-btn {
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .cart-btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: var(--danger);
+            color: white;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 6rem 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path fill="rgba(255, 165, 0, 0.05)" d="M0,0 L100,0 L100,100 Q50,80 0,100 Z"/></svg>');
+            background-size: cover;
+            background-position: bottom;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(255, 165, 0, 0.1) 0%, transparent 70%);
+            z-index: -1;
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+        
+        .hero h1 span {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            color: #cbd5e1;
+            max-width: 700px;
+            margin-bottom: 2.5rem;
+            line-height: 1.7;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 4rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .stat-item {
+            text-align: center;
+            min-width: 150px;
+        }
+        
+        .stat-number {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(255, 165, 0, 0.3);
+        }
+        
+        .stat-label {
+            font-size: 1.1rem;
+            color: #94a3b8;
+        }
+        
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 3rem 2rem;
+            flex: 1;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+        }
+        
+        .section-title h2 {
+            font-size: 2.8rem;
+            display: inline-block;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            padding: 0 2rem;
+        }
+        
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 5px;
+            background: var(--primary);
+            border-radius: 3px;
+            box-shadow: 0 0 10px rgba(255, 165, 0, 0.5);
+        }
+        
+        /* Painel de Categorias */
+        .category-panel {
+            background: linear-gradient(135deg, #0f1c31, #152a4a);
+            border-radius: 20px;
+            padding: 3rem;
+            margin: 0 auto 5rem;
+            max-width: 1400px;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid rgba(255, 165, 0, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+        }
+        
+        .category-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" preserveAspectRatio="none"><path fill="rgba(255, 165, 0, 0.05)" d="M0,0 L200,0 L200,200 Q100,180 0,200 Z"/></svg>');
+            background-size: cover;
+            z-index: -1;
+        }
+        
+        .category-panel h2 {
+            text-align: center;
+            font-size: 2.8rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .category-panel h2::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 150px;
+            height: 5px;
+            background: var(--primary);
+            border-radius: 3px;
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.5);
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .category-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 15px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s;
+            border: 2px solid rgba(100, 116, 139, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border-color: var(--primary);
+        }
+        
+        .category-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .cash-icon { background: linear-gradient(135deg, var(--cash), #2e7d32); }
+        .vip-icon { background: linear-gradient(135deg, var(--cavaleiro), var(--lord)); }
+        .kits-icon { background: linear-gradient(135deg, #ff9a9e, #fad0c4); }
+        .powers-icon { background: linear-gradient(135deg, #a1c4fd, #c2e9fb); }
+        .lands-icon { background: linear-gradient(135deg, #d4fc79, #96e6a1); }
+        .op-icon { background: linear-gradient(135deg, var(--op), #ff4757); }
+        .keys-icon { background: linear-gradient(135deg, var(--keys), #6a11cb); }
+        .farms-icon { background: linear-gradient(135deg, var(--farms), #0077b6); }
+        .spawners-icon { background: linear-gradient(135deg, var(--spawners), #00b4d8); }
+        .rares-icon { background: linear-gradient(135deg, var(--rares), #ffaa00); }
+        .claims-icon { background: linear-gradient(135deg, var(--claims), #00ff88); }
+        .minions-icon { background: linear-gradient(135deg, var(--minions), #1e3799); }
+        .tags-icon { background: linear-gradient(135deg, var(--tags), #e55039); }
+        
+        .category-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.8rem;
+            color: var(--light);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .category-card p {
+            color: #94a3b8;
+            font-size: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .category-card::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .category-card:hover::after {
+            opacity: 1;
+        }
+        
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 5rem;
+        }
+        
+        .product-card {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.8), rgba(20, 30, 48, 0.9));
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--primary);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 1.2rem;
+            left: 1.2rem;
+            background: var(--secondary);
+            color: #1a2a6c;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            z-index: 2;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .product-image {
+            height: 220px;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .product-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(transparent 60%, rgba(10, 25, 47, 0.9));
+        }
+        
+        .cash .product-image {
+            background: linear-gradient(45deg, #1b5e20, #43a047);
+        }
+        
+        .vip-cavaleiro .product-image {
+            background: linear-gradient(45deg, #006064, #00897b);
+        }
+        
+        .vip-guerreiro .product-image {
+            background: linear-gradient(45deg, #bf360c, #e65100);
+        }
+        
+        .vip-lord .product-image {
+            background: linear-gradient(45deg, #4a148c, #7b1fa2);
+        }
+        
+        .vip-baron .product-image {
+            background: linear-gradient(45deg, #e65100, #ff8f00);
+        }
+        
+        .op .product-image {
+            background: linear-gradient(45deg, #d63031, #ff7675);
+        }
+        
+        .keys .product-image {
+            background: linear-gradient(45deg, #6c5ce7, #a29bfe);
+        }
+        
+        .keys-pandora .product-image {
+            background: linear-gradient(45deg, #8e2de2, #4a00e0);
+        }
+        
+        .farms .product-image {
+            background: linear-gradient(45deg, #0984e3, #74b9ff);
+        }
+        
+        .spawners .product-image {
+            background: linear-gradient(45deg, #00b894, #55efc4);
+        }
+        
+        .rares .product-image {
+            background: linear-gradient(45deg, #fdcb6e, #ffeaa7);
+        }
+        
+        .claims .product-image {
+            background: linear-gradient(45deg, #00b894, #00cc66);
+        }
+        
+        .minions .product-image {
+            background: linear-gradient(45deg, #6a89cc, #1e3799);
+        }
+        
+        .powers .product-image {
+            background: linear-gradient(45deg, #f78fb3, #e84393);
+        }
+        
+        .tags .product-image {
+            background: linear-gradient(45deg, #f8c291, #e55039);
+        }
+        
+        .product-info {
+            padding: 1.8rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .product-title {
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: var(--light);
+        }
+        
+        .product-description {
+            color: #94a3b8;
+            font-size: 1rem;
+            margin-bottom: 1.2rem;
+            min-height: 70px;
+            line-height: 1.6;
+        }
+        
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .product-price {
+            font-size: 1.7rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-shadow: 0 0 5px rgba(255, 165, 0, 0.3);
+        }
+        
+        .product-cash {
+            background: rgba(76, 175, 80, 0.2);
+            color: var(--cash);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .product-duration {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .product-actions {
+            display: flex;
+            gap: 0.8rem;
+        }
+        
+        .btn-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            background: rgba(30, 41, 59, 0.5);
+            color: var(--light);
+            font-size: 1.1rem;
+        }
+        
+        .btn-icon:hover {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3);
+            color: #0a192f;
+        }
+        
+        .btn-buy {
+            flex: 1;
+            padding: 0.8rem;
+            font-weight: 600;
+            background: var(--primary);
+            color: #0a192f;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-buy:hover {
+            background: var(--primary-dark);
+            transform: translateY(-3px);
+            box-shadow: 0 7px 15px rgba(255, 140, 0, 0.4);
+        }
+        
+        /* Featured Product */
+        .featured-product {
+            background: linear-gradient(135deg, rgba(142, 45, 226, 0.8), rgba(74, 0, 224, 0.9));
+            border-radius: 15px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 3rem;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            border: 2px solid var(--pandora);
+        }
+        
+        .featured-header {
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.2);
+            text-align: center;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+        }
+        
+        .featured-header h3 {
+            font-size: 2rem;
+            color: white;
+            text-shadow: 0 0 10px rgba(255,255,255,0.3);
+        }
+        
+        .featured-content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .featured-image {
+            flex: 1;
+            min-width: 300px;
+            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(45deg, #8e2de2, #4a00e0);
+            font-size: 6rem;
+            color: white;
+        }
+        
+        .featured-info {
+            flex: 1;
+            min-width: 300px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .featured-title {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+        
+        .featured-description {
+            color: #e0d6ff;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .featured-price {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+        }
+        
+        .featured-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        /* Top Buyers & Discord */
+        .info-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            margin-bottom: 5rem;
+        }
+        
+        .top-buyers, .discord-widget {
+            background: linear-gradient(145deg, rgba(30, 41, 59, 0.7), rgba(20, 30, 48, 0.8));
+            border-radius: 15px;
+            padding: 2.5rem;
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .section-header h3 {
+            font-size: 1.7rem;
+            color: var(--primary);
+        }
+        
+        .buyer-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+        }
+        
+        .buyer-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.5);
+            transition: all 0.3s;
+            border: 1px solid rgba(100, 116, 139, 0.2);
+        }
+        
+        .buyer-item:hover {
+            background: rgba(255, 165, 0, 0.1);
+            transform: translateX(8px);
+            border-color: var(--primary);
+        }
+        
+        .buyer-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1.2rem;
+            flex-shrink: 0;
+        }
+        
+        .buyer-info {
+            flex: 1;
+        }
+        
+        .buyer-name {
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--light);
+        }
+        
+        .buyer-spent {
+            color: #94a3b8;
+            font-size: 0.95rem;
+        }
+        
+        .buyer-rank {
+            font-weight: 800;
+            color: var(--warning);
+            font-size: 1.1rem;
+        }
+        
+        .discord-widget {
+            display: flex;
+            flex-direction: column;
+            background: linear-gradient(145deg, rgba(88, 101, 242, 0.1), rgba(88, 101, 242, 0.15));
+            border: 1px solid rgba(88, 101, 242, 0.3);
+        }
+        
+        .discord-header {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .discord-icon {
+            width: 55px;
+            height: 55px;
+            background: #5865F2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 5px 15px rgba(88, 101, 242, 0.3);
+        }
+        
+        .discord-content {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 12px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        
+        .discord-content h4 {
+            font-size: 1.4rem;
+            margin-bottom: 1.2rem;
+            color: var(--primary);
+        }
+        
+        .discord-content p {
+            color: #94a3b8;
+            margin-bottom: 1.8rem;
+            max-width: 320px;
+            line-height: 1.7;
+        }
+        
+        .online-members {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            margin-bottom: 1.8rem;
+            background: rgba(16, 185, 129, 0.15);
+            padding: 0.6rem 1.2rem;
+            border-radius: 20px;
+        }
+        
+        .online-dot {
+            width: 12px;
+            height: 12px;
+            background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 10px rgba(34, 197, 94, 0.5);
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(to top, rgba(10, 25, 47, 0.95), rgba(15, 23, 42, 0.9));
+            padding: 4rem 2rem;
+            border-top: 2px solid var(--primary);
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3.5rem;
+        }
+        
+        .footer-column h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1.8rem;
+            color: var(--primary);
+            position: relative;
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 1rem;
+        }
+        
+        .footer-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            font-size: 1.05rem;
+        }
+        
+        .footer-links a:hover {
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+        }
+        
+        .social-link {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: rgba(100, 116, 139, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+        
+        .social-link:hover {
+            background: var(--primary);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 165, 0, 0.3);
+            color: #0a192f;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 4rem;
+            color: #64748b;
+            font-size: 1rem;
+            border-top: 1px solid rgba(100, 116, 139, 0.3);
+            margin-top: 4rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        /* Floating cart button */
+        .floating-cart {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #0a192f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: 0 5px 20px rgba(255, 165, 0, 0.4);
+            cursor: pointer;
+            z-index: 99;
+            transition: all 0.3s;
+        }
+        
+        .floating-cart:hover {
+            transform: scale(1.1) rotate(10deg);
+            box-shadow: 0 8px 25px rgba(255, 165, 0, 0.6);
+        }
+        
+        .floating-cart .cart-count {
+            top: -5px;
+            right: -5px;
+            width: 25px;
+            height: 25px;
+        }
+        
+        /* Modais */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .modal {
+            background: #1e293b;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transform: translateY(20px);
+            transition: transform 0.4s;
+            overflow: hidden;
+            border: 2px solid var(--primary);
+        }
+        
+        .modal-overlay.active .modal {
+            transform: translateY(0);
+        }
+        
+        .modal-header {
+            padding: 1.5rem;
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+        
+        .modal-header h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0,0,0,0.3);
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            background: var(--danger);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            padding: 1.5rem;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            color: var(--light);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .pix-section {
+            margin: 1.5rem 0;
+            text-align: center;
+        }
+        
+        #pix-qrcode {
+            margin: 0 auto 1rem;
+            width: 200px;
+            height: 200px;
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .pix-key {
+            background: rgba(255,255,255,0.05);
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            word-break: break-all;
+            color: var(--warning);
+            border: 1px dashed rgba(255,255,255,0.1);
+        }
+        
+        .pix-instructions {
+            color: #94a3b8;
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            text-align: left;
+        }
+        
+        .pix-instructions ul {
+            margin: 0.5rem 0 0 1.5rem;
+        }
+        
+        .pix-instructions li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .coupon-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .coupon-title {
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            color: var(--warning);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .coupon-input {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .coupon-input input {
+            flex: 1;
+            padding: 0.8rem;
+        }
+        
+        .coupon-message {
+            margin-top: 0.8rem;
+            padding: 0.6rem;
+            border-radius: 6px;
+            text-align: center;
+            display: none;
+            font-size: 0.9rem;
+        }
+        
+        .coupon-success {
+            background: rgba(46, 204, 113, 0.15);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+        
+        .coupon-error {
+            background: rgba(231, 76, 60, 0.15);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+        
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid rgba(100, 116, 139, 0.3);
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        /* Modal de Descrição */
+        .description-modal .modal-body {
+            padding: 2rem;
+        }
+        
+        .product-details {
+            margin-bottom: 1.5rem;
+        }
+        
+        .product-details h4 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .product-features {
+            list-style: none;
+            margin: 1rem 0;
+        }
+        
+        .product-features li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            border-bottom: 1px dashed rgba(100, 116, 139, 0.3);
+        }
+        
+        .product-features li i {
+            color: var(--success);
+        }
+        
+        /* Botão de remover item */
+        .remove-item {
+            background: rgba(239, 68, 68, 0.1) !important;
+            border-color: rgba(239, 68, 68, 0.3) !important;
+            color: #ef4444 !important;
+        }
+        
+        .remove-item:hover {
+            background: #ef4444 !important;
+            color: white !important;
+        }
+        
+        /* Modal de Conta */
+        .account-modal .modal-body {
+            padding: 2rem;
+        }
+        
+        .account-type {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .account-type-btn {
+            flex: 1;
+            padding: 1rem;
+            border: 2px solid rgba(100, 116, 139, 0.3);
+            border-radius: 10px;
+            background: rgba(15, 23, 42, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .account-type-btn:hover {
+            border-color: var(--primary);
+        }
+        
+        .account-type-btn.active {
+            background: rgba(255, 165, 0, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .account-type-btn i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 1100px) {
+            .info-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 3.2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 1.2rem;
+                padding: 1.2rem;
+            }
+            
+            nav ul {
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero {
+                padding: 4rem 1.5rem;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stats {
+                gap: 2rem;
+            }
+            
+            .category-panel {
+                padding: 1.5rem;
+            }
+            
+            .product-card {
+                max-width: 350px;
+                margin: 0 auto;
+            }
+            
+            .featured-content {
+                flex-direction: column;
+            }
+            
+            .featured-image {
+                height: 250px;
+            }
+            
+            .section-title h2 {
+                font-size: 2.2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .stat-number {
+                font-size: 2.2rem;
+            }
+            
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+        }
+        
+        /* Novos estilos para organização */
+        .category-section {
+            margin-bottom: 5rem;
+        }
+        
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 165, 0, 0.3);
+        }
+        
+        .category-title {
+            font-size: 2.2rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        .category-title::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 80%;
+            width: 8px;
+            background: var(--primary);
+            border-radius: 4px;
+        }
+        
+        .view-all {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .view-all:hover {
+            transform: translateX(5px);
+        }
+        
+        .category-description {
+            color: #94a3b8;
+            margin-bottom: 2rem;
+            max-width: 800px;
+            line-height: 1.7;
+        }
+        
+        /* Upload area */
+        .upload-area {
+            background: rgba(15, 23, 42, 0.5);
+            border: 2px dashed rgba(100, 116, 139, 0.5);
+            border-radius: 10px;
+            padding: 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(255, 165, 0, 0.05);
+        }
+        
+        .upload-area i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+        
+        .file-preview {
+            display: none;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 1rem;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .file-preview i {
+            font-size: 1.5rem;
+        }
+        
+        .file-actions {
+            margin-left: auto;
+        }
+        
+        /* Novos estilos */
+        .command-info {
+            background: rgba(255, 165, 0, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin: 1rem 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .command-info p {
+            font-family: monospace;
+            color: var(--light);
+            word-break: break-all;
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Solário MC Store</h1>
-  </header>
-  <main class="grid">
-    <!-- VIP Produkts -->
-    <div class="card" data-desc="Acesso VIP Cavaleiro de 31 dias com comandos exclusivos."><img src="https://via.placeholder.com/300x160?text=VIP+Cavaleiro"><div class="card-content"><div class="card-title">VIP Cavaleiro</div><div class="card-price">R$ 10</div><div class="actions"><button class="btn btn-info" onclick="abrirDescricao(this)">Descrição</button><button class="btn btn-buy" onclick="abrirPopup('Cavaleiro')">Comprar</button></div></div></div>
-    <div class="card" data-desc="Acesso VIP Guerreiro de 31 dias com perks de combate."><img src="https://via.placeholder.com/300x160?text=VIP+Guerreiro"><div class="card-content"><div class="card-title">VIP Guerreiro</div><div class="card-price">R$ 28</div><div class="actions"><button class="btn btn-info" onclick="abrirDescricao(this)">Descrição</button><button class="btn btn-buy" onclick="abrirPopup('Guerreiro')">Comprar</button></div></div></div>
-    <div class="card" data-desc="Acesso VIP Lord de 31 dias com poderes administrativos."><img src="https://via.placeholder.com/300x160?text=VIP+Lord"><div class="card-content"><div class="card-title">VIP Lord</div><div class="card-price">R$ 44</div><div class="actions"><button class="btn btn-info" onclick="abrirDescricao(this)">Descrição</button><button class="btn btn-buy" onclick="abrirPopup('Lord')">Comprar</button></div></div></div>
-    <div class="card" data-desc="Acesso VIP Barão de 31 dias com status permanente."><img src="https://via.placeholder.com/300x160?text=VIP+Bar%C3%A3o"><div class="card-content"><div class="card-title">VIP Barão</div><div class="card-price">R$ 60</div><div class="actions"><button class="btn btn-info" onclick="abrirDescricao(this)">Descrição</button><button class="btn btn-buy" onclick="abrirPopup('Barão')">Comprar</button></div></div></div>
-    <!-- Cash -->
-    <div class="card" data-desc="Compre Cash para usar na loja interna."><img src="https://via.placeholder.com/300x160?text=Cash"><div class="card-content"><div class="card-title">Comprar Cash</div><div class="card-price">10 R$ = 1000 Cash</div><div class="actions"><button class="btn btn-info" onclick="abrirDescricao(this)">Descrição</button><button class="btn btn-buy" onclick="abrirPopup('cash')">Comprar</button></div></div></div>
-    <!-- Chaves -->
-    <div class="card" data-desc="Chaves para baús: Comum, Spawn, Especial e Pandora."><img src="https://via.placeholder.com/300x160?text=Chaves"><div class="card-content"><div class="card-title">Comprar Chaves</div><div class="card-price">A partir de R$ 2</div><div class="actions"><button class="btn btn-info" onclick="abrirDescricao(this)">Descrição</button><button class="btn btn-buy" onclick="abrirPopup('chaves')">Comprar</button></div></div></div>
-  </main>
+    <!-- Header -->
+    <header>
+        <div class="logo-container">
+            <div class="logo">SC</div>
+            <div class="logo-text">SolarioMC</div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#"><i class="fas fa-home"></i> Início</a></li>
+                <li><a href="#loja"><i class="fas fa-store"></i> Loja</a></li>
+                <li><a href="#vips"><i class="fas fa-crown"></i> VIPs</a></li>
+                <li><a href="#cash"><i class="fas fa-coins"></i> Cash</a></li>
+                <li><a href="#chaves"><i class="fas fa-key"></i> Chaves</a></li>
+                <li><a href="#claims"><i class="fas fa-shield-alt"></i> Claims</a></li>
+                <li><a href="#minions"><i class="fas fa-robot"></i> Minions</a></li>
+            </ul>
+        </nav>
+        <div class="header-actions">
+            <button class="btn btn-outline" id="accountBtn"><i class="fas fa-user"></i> Minha Conta</button>
+            <button class="btn btn-primary cart-btn" id="cartBtn">
+                <i class="fas fa-shopping-cart"></i> Carrinho
+                <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </div>
+    </header>
 
-  <div class="popup" id="popup">
-    <div class="popup-content" id="popup-content"></div>
-  </div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <h1>Adquira <span>cash e vantagens exclusivas</span> no SolarioMC</h1>
+        <p>Compre pacotes de cash, VIPs, chaves e itens especiais com entrega automática no jogo</p>
+        <div class="hero-buttons">
+            <button class="btn btn-primary" id="shopBtn"><i class="fas fa-coins"></i> Comprar Cash</button>
+            <button class="btn btn-outline"><i class="fas fa-play-circle"></i> Ver Demonstração</button>
+        </div>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">2.3K</div>
+                <div class="stat-label">Jogadores Atendidos</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">99%</div>
+                <div class="stat-label">Satisfação dos Clientes</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">24/7</div>
+                <div class="stat-label">Suporte Online</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">0s</div>
+                <div class="stat-label">Tempo de Entrega</div>
+            </div>
+        </div>
+    </section>
 
-  <script>
-    function abrirPopup(tipo) {
-      const popup = document.getElementById('popup');
-      const content = document.getElementById('popup-content');
-      popup.style.display = 'flex';
-      const qrPix = 'https://i.imgur.com/QRexemplo.png'; // troque pela URL real
-      let html = `<button class="close-btn" onclick="fecharPopup()">×</button>`;
-      html += `<label>Nome do jogador:</label><br><input type="text" id="nickInput" placeholder="Seu nick">`;
-      html += `<p>Chave PIX: <strong>00020126710014br.gov.bcb.pix0136...10E7</strong></p>`;
-      html += `<img src="${qrPix}" alt="QR PIX" style="width:180px;margin:10px auto;"><br>`;
-      if (tipo === 'cash') {
-        html += `<h2>Comprar Cash</h2><p>10 R$ = 1000 Cash</p>`;
-        html += `<label>Quantidade de Cash:</label><br><input type="number" id="cashCount" min="1" value="1000">`;
-      } else if (tipo === 'chaves') {
-        html += `<h2>Comprar Chaves</h2><label>Tipo:</label><br><select id="produtoSelect"><option>Chave Comum - R$2</option><option>Chave Spawn - R$5</option><option>Chave Especial - R$8</option><option>Chave Pandora - R$50</option></select><br>`;
-        html += `<label>Quantidade de Chaves:</label><br><input type="number" id="keyCount" min="1" value="1">`;
-      } else {
-        html += `<h2>Pagamento VIP ${tipo}</h2>`;
-      }
-      html += `<label>Comprovante:</label><br><input type="file" id="comprovanteInput" accept="image/*"><br>`;
-      html += `<button onclick="enviarComprovante('${tipo}')">Enviar Comprovante</button>`;
-      content.innerHTML = html;
-    }
-    function fecharPopup() { document.getElementById('popup').style.display = 'none'; }
-    function abrirDescricao(btn) {
-      const desc = btn.closest('.card').getAttribute('data-desc');
-      alert(desc);
-    }
-    async function enviarComprovante(tipo) {
-      const nick = document.getElementById('nickInput').value;
-      const file = document.getElementById('comprovanteInput').files[0];
-      if (!nick || !file) return alert('Preencha nick e comprovante');
-      let produto, valor;
-      const fd = new FormData();
-      fd.append('nick', nick);
-      fd.append('comprovante', file);
-      if (tipo === 'cash') {
-        const cnt = +document.getElementById('cashCount').value;
-        produto = `${cnt} Cash`;
-        valor = ((cnt / 1000) * 10).toFixed(2);
-      } else if (tipo === 'chaves') {
-        const sel = document.getElementById('produtoSelect');
-        const cnt2 = +document.getElementById('keyCount').value;
-        produto = `${cnt2} ${sel.value.split(' - ')[0]}`;
-        const map = { 'Chave Comum':2, 'Chave Spawn':5, 'Chave Especial':8, 'Chave Pandora':50 };
-        valor = (map[sel.value.split(' - ')[0]] * cnt2).toFixed(2);
-      } else {
-        produto = `VIP ${tipo}`;
-        const vipMap = { 'Cavaleiro':10, 'Guerreiro':28, 'Lord':44, 'Barão':60 };
-        valor = vipMap[tipo].toFixed(2);
-      }
-      fd.append('produto', produto);
-      fd.append('valor', valor);
-      try {
-        const res = await fetch('https://ovh-vin-01.elgaehost.com.br:3000/comprovante', { method:'POST', body:fd });
-        if (res.ok) { alert('✅ Comprovante enviado!'); fecharPopup(); }
-        else alert('❌ Erro no envio');
-      } catch(e) {
-        alert('❌ Falha de conexão');
-      }
-    }
-  </script>
+    <!-- Painel de Categorias Premium -->
+    <div class="container" id="loja">
+        <div class="category-panel">
+            <h2>Nossas Categorias Premium</h2>
+            <div class="categories-grid">
+                <!-- Cash -->
+                <div class="category-card" onclick="scrollToSection('cash')">
+                    <div class="category-icon cash-icon">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <h3>Cash</h3>
+                    <p>Moedas para usar no servidor</p>
+                </div>
+                
+                <!-- VIPs -->
+                <div class="category-card" onclick="scrollToSection('vips')">
+                    <div class="category-icon vip-icon">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3>VIPs</h3>
+                    <p>Vantagens exclusivas no servidor</p>
+                </div>
+                
+                <!-- Kits -->
+                <div class="category-card" onclick="scrollToSection('kits')">
+                    <div class="category-icon kits-icon">
+                        <i class="fas fa-box-open"></i>
+                    </div>
+                    <h3>Kits</h3>
+                    <p>Kits especiais com itens únicos</p>
+                </div>
+                
+                <!-- Poderes -->
+                <div class="category-card" onclick="scrollToSection('poderes')">
+                    <div class="category-icon powers-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h3>Poderes</h3>
+                    <p>Habilidades e poderes especiais</p>
+                </div>
+                
+                <!-- Terrenos -->
+                <div class="category-card" onclick="scrollToSection('terrenos')">
+                    <div class="category-icon lands-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    <h3>Terrenos</h3>
+                    <p>Terrenos e áreas protegidas</p>
+                </div>
+                
+                <!-- Claims -->
+                <div class="category-card" onclick="scrollToSection('claims')">
+                    <div class="category-icon claims-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Claims</h3>
+                    <p>Proteja seus terrenos</p>
+                </div>
+                
+                <!-- Itens OP -->
+                <div class="category-card" onclick="scrollToSection('itens-op')">
+                    <div class="category-icon op-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3>Itens OP</h3>
+                    <p>Itens superpoderosos exclusivos</p>
+                </div>
+                
+                <!-- Chaves -->
+                <div class="category-card" onclick="scrollToSection('chaves')">
+                    <div class="category-icon keys-icon">
+                        <i class="fas fa-key"></i>
+                    </div>
+                    <h3>Chaves</h3>
+                    <p>Chaves para recompensas especiais</p>
+                </div>
+                
+                <!-- Farms -->
+                <div class="category-card" onclick="scrollToSection('farms')">
+                    <div class="category-icon farms-icon">
+                        <i class="fas fa-tractor"></i>
+                    </div>
+                    <h3>Farms</h3>
+                    <p>Sistemas de coleta automática</p>
+                </div>
+                
+                <!-- Spawners -->
+                <div class="category-card" onclick="scrollToSection('spawners')">
+                    <div class="category-icon spawners-icon">
+                        <i class="fas fa-ghost"></i>
+                    </div>
+                    <h3>Spawners</h3>
+                    <p>Geradores de criaturas personalizados</p>
+                </div>
+                
+                <!-- Raros -->
+                <div class="category-card" onclick="scrollToSection('rares')">
+                    <div class="category-icon rares-icon">
+                        <i class="fas fa-dragon"></i>
+                    </div>
+                    <h3>Raros</h3>
+                    <p>Itens colecionáveis extremamente raros</p>
+                </div>
+                
+                <!-- Minions -->
+                <div class="category-card" onclick="scrollToSection('minions')">
+                    <div class="category-icon minions-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3>Minions</h3>
+                    <p>Coletores automáticos de recursos</p>
+                </div>
+                
+                <!-- Tags -->
+                <div class="category-card" onclick="scrollToSection('tags')">
+                    <div class="category-icon tags-icon">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                    <h3>Tags</h3>
+                    <p>Tags personalizadas para seu nome</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Seção de Cash -->
+        <div class="category-section" id="cash">
+            <div class="category-header">
+                <div>
+                    <h2 class="category-title">Pacotes de Cash</h2>
+                    <p class="category-description">Adquira moedas virtuais para comprar itens, vantagens e recursos dentro do servidor</p>
+                </div>
+                <a href="#" class="view-all">Ver Todos <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <!-- Pacote de Cash em destaque -->
+            <div class="featured-product">
+                <div class="featured-header">
+                    <h3>TOP DESTAQUE</h3>
+                </div>
+                <div class="featured-content">
+                    <div class="featured-image">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                    <div class="featured-info">
+                        <h3 class="featured-title">10.000 Cash</h3>
+                        <p class="featured-description">O pacote inicial de cash perfeito para começar no servidor! Com este cash você poderá comprar itens básicos, equipamentos iniciais e desbloquear algumas vantagens essenciais para progredir mais rápido.</p>
+                        <div class="featured-price">R$ 5,00 <span style="text-decoration: line-through; color: #94a3b8; font-size: 1.5rem;">R$ 10,00</span></div>
+                        <div class="featured-actions">
+                            <button class="btn btn-outline" id="viewCashBtn">
+                                <i class="fas fa-eye"></i> Ver Detalhes
+                            </button>
+                            <button class="btn btn-primary" id="buyCashBtn">
+                                <i class="fas fa-shopping-cart"></i> Comprar Agora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="products-grid" id="cashProductsContainer">
+                <!-- Produtos de cash serão carregados via JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Seção de VIPs -->
+        <div class="category-section" id="vips">
+            <div class="category-header">
+                <div>
+                    <h2 class="category-title">Pacotes VIP</h2>
+                    <p class="category-description">Vantagens exclusivas para jogadores premium com benefícios especiais</p>
+                </div>
+                <a href="#" class="view-all">Ver Todos <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="vipProductsContainer">
+                <!-- Produtos VIP serão carregados via JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Seção de Kits -->
+        <div class="category-section" id="kits">
+            <div class="category-header">
+                <div>
+                    <h2 class="category-title">Kits Especiais</h2>
+                    <p class="category-description">Coleções de itens poderosos para impulsionar sua jornada</p>
+                </div>
+                <a href="#" class="view-all">Ver Todos <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="kitsProductsContainer">
+                <!-- Produtos de Kits serão carregados via JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Seção de Poderes -->
+        <div class="category-section" id="poderes">
+            <div class="category-header">
+                <div>
+                    <h2 class="category-title">Poderes</h2>
+                    <p class="category-description">Habilidades especiais para dominar o servidor</p>
+                </div>
+                <a href="#" class="view-all">Ver Todos <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="powersProductsContainer">
+                <!-- Produtos de Poderes serão carregados via JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Seção de Terrenos -->
+        <div class="category-section" id="terrenos">
+            <div class="category-header">
+                <div>
+                    <h2 class="category-title">Terrenos</h2>
+                    <p class="category-description">Áreas protegidas para construir sua base</p>
+                </div>
+                <a href="#" class="view-all">Ver Todos <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="landsProductsContainer">
+                <p style="color: #94a3b8; text-align: center; grid-column: 1 / -1; padding: 2rem;">Em breve novos terrenos!</p>
+            </div>
+        </div>
+        
+        <!-- Seção de Claims -->
+        <div class="category-section" id="claims">
+            <div class="category-header">
+                <div>
+                    <h2 class="category-title">Blocos de Claims</h2>
+                    <p class="category-description">Proteja seus terrenos e construções com nossos blocos de claims</p>
+                </div>
+                <a href="#" class="view-all">Ver Todos <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="claimsProductsContainer">
+                <!-- Produtos de Claims serão carregados via JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Seção de Chaves -->
+        <div class="category-section" id="chaves">
+            <div class="category-header">
+                <div>
+                    <h2 class="category-title">Chaves Especiais</h2>
+                    <p class="category-description">Desbloqueie recompensas exclusivas e itens raros com nossas chaves especiais</p>
+                </div>
+                <a href="#" class="view-all">Ver Todos <i class="fas fa-arrow-right"></i></a>
+            </div>
+            
+            <!-- Chave Pandora em destaque -->
+            <div class="featured-product">
+                <div class="featured-header">
+                    <h3>TOP DESTAQUE</h3>
+                </div>
+                <div class="featured-content">
+                    <div class="featured-image">
+                        <i class="fas fa-lock-open"></i>
+                    </div>
+                    <div class="featured-info">
+                        <h3 class="featured-title">Chave Pandora</h3>
+                        <p class="featured-description">A chave mais poderosa do servidor! Abre baús com itens lendários, recursos raros e recompensas exclusivas que não podem ser obtidas de outra forma.</p>
+                        <div class="featured-price">R$ 75,00 <span style="text-decoration: line-through; color: #94a3b8; font-size: 1.5rem;">R$ 100,00</span></div>
+                        <div class="featured-actions">
+                            <button class="btn btn-outline" id="viewPandoraBtn">
+                                <i class="fas fa-eye"></i> Ver Detalhes
+                            </button>
+                            <button class="btn btn-primary" id="buyPandoraBtn">
+                                <i class="fas fa-shopping-cart"></i> Comprar Agora
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="products-grid" id="keysProductsContainer">
+                <!-- Produtos de Chaves serão carregados via JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Seção de Itens OP -->
+        <div class="category-section" id="itens-op">
+            <div class="category-header">
+                <div>
+                    <h2 class="category-title">Itens OP</h2>
+                    <p class="category-description">Armas e equipamentos lendários com poderes extraordinários</p>
+                </div>
+                <a href="#" class="view-all">Ver Todos <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="opProductsContainer">
+                <!-- Produtos de Itens OP serão carregados via JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Seção de Farms -->
+        <div class="category-section" id="farms">
+            <div class="category-header">
+                <div>
+                    <h2 class="category-title">Farms Automáticas</h2>
+                    <p class="category-description">Sistemas automatizados para coletar recursos sem esforço</p>
+                </div>
+                <a href="#" class="view-all">Ver Todos <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="farmsProductsContainer">
+                <!-- Produtos de Farms serão carregados via JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Seção de Spawners -->
+        <div class="category-section" id="spawners">
+            <div class="category-header">
+                <div>
+                    <h2 class="category-title">Spawners Personalizados</h2>
+                    <p class="category-description">Geradores de criaturas para coletar recursos específicos</p>
+                </div>
+                <a href="#" class="view-all">Ver Todos <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="spawnersProductsContainer">
+                <!-- Produtos de Spawners serão carregados via JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Seção de Raros -->
+        <div class="category-section" id="rares">
+            <div class="category-header">
+                <div>
+                    <h2 class="category-title">Itens Raros</h2>
+                    <p class="category-description">Colecionáveis exclusivos e itens lendários de valor inestimável</p>
+                </div>
+                <a href="#" class="view-all">Ver Todos <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="raresProductsContainer">
+                <!-- Produtos de Raros serão carregados via JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Seção de Minions -->
+        <div class="category-section" id="minions">
+            <div class="category-header">
+                <div>
+                    <h2 class="category-title">Minions</h2>
+                    <p class="category-description">Coletores automáticos de recursos para maximizar sua produção</p>
+                </div>
+                <a href="#" class="view-all">Ver Todos <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="minionsProductsContainer">
+                <!-- Produtos de Minions serão carregados via JavaScript -->
+            </div>
+        </div>
+        
+        <!-- Seção de Tags -->
+        <div class="category-section" id="tags">
+            <div class="category-header">
+                <div>
+                    <h2 class="category-title">Tags Personalizadas</h2>
+                    <p class="category-description">Personalize seu nome no servidor com tags exclusivas</p>
+                </div>
+                <a href="#" class="view-all">Ver Todos <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="products-grid" id="tagsProductsContainer">
+                <!-- Produtos de Tags serão carregados via JavaScript -->
+            </div>
+        </div>
+
+        <!-- Top Buyers & Discord Section -->
+        <div class="info-section">
+            <div class="top-buyers">
+                <div class="section-header">
+                    <h3>Top Compradores</h3>
+                    <div class="btn btn-outline">Ver Ranking Completo</div>
+                </div>
+                <div class="buyer-list">
+                    <!-- Buyer 1 -->
+                    <div class="buyer-item">
+                        <div class="buyer-avatar">1</div>
+                        <div class="buyer-info">
+                            <div class="buyer-name">MinerPro</div>
+                            <div class="buyer-spent">Total: R$ 149,90</div>
+                        </div>
+                        <div class="buyer-rank">#1</div>
+                    </div>
+                    
+                    <!-- Buyer 2 -->
+                    <div class="buyer-item">
+                        <div class="buyer-avatar">2</div>
+                        <div class="buyer-info">
+                            <div class="buyer-name">DiamondKing</div>
+                            <div class="buyer-spent">Total: R$ 129,50</div>
+                        </div>
+                        <div class="buyer-rank">#2</div>
+                    </div>
+                    
+                    <!-- Buyer 3 -->
+                    <div class="buyer-item">
+                        <div class="buyer-avatar">3</div>
+                        <div class="buyer-info">
+                            <div class="buyer-name">RedstoneMaster</div>
+                            <div class="buyer-spent">Total: R$ 109,90</div>
+                        </div>
+                        <div class="buyer-rank">#3</div>
+                    </div>
+                    
+                    <!-- Buyer 4 -->
+                    <div class="buyer-item">
+                        <div class="buyer-avatar">4</div>
+                        <div class="buyer-info">
+                            <div class="buyer-name">EnderSlayer</div>
+                            <div class="buyer-spent">Total: R$ 99,90</div>
+                        </div>
+                        <div class="buyer-rank">#4</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="discord-widget">
+                <div class="discord-header">
+                    <div class="discord-icon">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <h3>Nosso Discord</h3>
+                </div>
+                <div class="discord-content">
+                    <h4>Junte-se à nossa comunidade!</h4>
+                    <p>Participe do nosso servidor no Discord para receber novidades, suporte e interagir com outros jogadores.</p>
+                    <div class="online-members">
+                        <div class="online-dot"></div>
+                        <span>327 membros online</span>
+                    </div>
+                    <a href="https://discord.gg/SHZq7FhJWN" target="_blank" class="btn btn-primary">
+                        <i class="fab fa-discord"></i> Entrar no Discord
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>Sobre Nós</h3>
+                <p style="color: #94a3b8; margin-bottom: 1.5rem;">SolarioMC é um servidor de Minecraft com uma comunidade ativa e diversificada, oferecendo os melhores produtos com entrega instantânea.</p>
+                <div class="social-links">
+                    <a href="https://discord.gg/SHZq7FhJWN" target="_blank" class="social-link"><i class="fab fa-discord"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="social-link"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-column">
+                <h3>Links Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-right"></i> Início</a></li>
+                    <li><a href="#loja"><i class="fas fa-chevron-right"></i> Loja</a></li>
+                    <li><a href="#vips"><i class="fas fa-chevron-right"></i> VIPs</a></li>
+                    <li><a href="#cash"><i class="fas fa-chevron-right"></i> Cash</a></li>
+                    <li><a href="#chaves"><i class="fas fa-chevron-right"></i> Chaves</a></li>
+                    <li><a href="#claims"><i class="fas fa-chevron-right"></i> Claims</a></li>
+                    <li><a href="#minions"><i class="fas fa-chevron-right"></i> Minions</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Categorias</h3>
+                <ul class="footer-links">
+                    <li><a href="#cash"><i class="fas fa-chevron-right"></i> Cash</a></li>
+                    <li><a href="#vips"><i class="fas fa-chevron-right"></i> VIPs</a></li>
+                    <li><a href="#kits"><i class="fas fa-chevron-right"></i> Kits</a></li>
+                    <li><a href="#poderes"><i class="fas fa-chevron-right"></i> Poderes</a></li>
+                    <li><a href="#terrenos"><i class="fas fa-chevron-right"></i> Terrenos</a></li>
+                    <li><a href="#claims"><i class="fas fa-chevron-right"></i> Claims</a></li>
+                    <li><a href="#itens-op"><i class="fas fa-chevron-right"></i> Itens OP</a></li>
+                    <li><a href="#chaves"><i class="fas fa-chevron-right"></i> Chaves</a></li>
+                    <li><a href="#farms"><i class="fas fa-chevron-right"></i> Farms</a></li>
+                    <li><a href="#spawners"><i class="fas fa-chevron-right"></i> Spawners</a></li>
+                    <li><a href="#rares"><i class="fas fa-chevron-right"></i> Raros</a></li>
+                    <li><a href="#minions"><i class="fas fa-chevron-right"></i> Minions</a></li>
+                    <li><a href="#tags"><i class="fas fa-chevron-right"></i> Tags</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>Informações de Contato</h3>
+                <ul class="footer-links">
+                    <li><a href="https://discord.gg/SHZq7FhJWN" target="_blank"><i class="fab fa-discord"></i> discord.gg/SHZq7FhJWN</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            &copy; 2023 SolarioMC - Todos os direitos reservados. Minecraft é uma marca registrada da Mojang Studios.
+        </div>
+    </footer>
+
+    <!-- Floating Cart Button -->
+    <div class="floating-cart" id="floatingCartBtn">
+        <i class="fas fa-shopping-cart"></i>
+        <span class="cart-count" id="floatingCartCount">0</span>
+    </div>
+
+    <!-- Modal de Pagamento -->
+    <div class="modal-overlay" id="paymentModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Pagamento via PIX</h3>
+                <p>Complete sua compra com segurança</p>
+                <button class="close-modal" id="closePaymentModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="username">Nickname no Minecraft</label>
+                    <input type="text" id="username" class="form-control" placeholder="Digite seu nickname" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="userNote">Informações adicionais (opcional)</label>
+                    <textarea id="userNote" class="form-control" placeholder="Digite alguma informação adicional sobre sua compra"></textarea>
+                </div>
+                
+                <div class="coupon-section">
+                    <div class="coupon-title">
+                        <i class="fas fa-ticket-alt"></i> Cupom de Desconto
+                    </div>
+                    <div class="coupon-input">
+                        <input type="text" id="couponCode" class="form-control" placeholder="Digite seu cupom">
+                        <button class="btn btn-primary" id="applyCoupon">Aplicar</button>
+                    </div>
+                    <div class="coupon-message" id="couponMessage"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Resumo do Pedido</label>
+                    <div style="background: rgba(15, 23, 42, 0.5); border-radius: 8px; padding: 1rem; margin-top: 0.5rem;">
+                        <div id="orderItems"></div>
+                        <div style="border-top: 1px solid rgba(100, 116, 139, 0.3); margin-top: 0.5rem; padding-top: 0.5rem; display: flex; justify-content: space-between; font-weight: bold;">
+                            <span>Total:</span>
+                            <span id="orderTotal">R$ 0,00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Área de upload de comprovante -->
+                <div class="form-group">
+                    <label>Enviar Comprovante</label>
+                    <div class="upload-area" id="uploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <div class="upload-text">
+                            <p>Arraste e solte seu comprovante aqui</p>
+                            <p>ou <span style="color: var(--primary);">clique para selecionar</span></p>
+                        </div>
+                        <p style="font-size: 0.9rem; color: #94a3b8;">
+                            Formatos aceitos: JPG, PNG, PDF (até 5MB)
+                        </p>
+                        <input type="file" id="proofInput" accept=".jpg,.jpeg,.png,.pdf" style="display: none;">
+                        <div class="file-preview" id="filePreview">
+                            <i class="fas fa-file"></i>
+                            <span id="fileName"></span>
+                            <div class="file-actions">
+                                <button class="btn-icon remove-item" id="removeFileBtn">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pix-section">
+                    <div id="pix-qrcode"></div>
+                    <div class="pix-key">00020126600014br.gov.bcb.pix0114+55849913674160220dnstrhqrhahatjtahhjj5204000053039865802BR5924MURILO MEDEIROS DE PAIVA6009Sao Paulo62190515abatbarbrarabar63040A85</div>
+                    
+                    <div class="pix-instructions">
+                        <p>Como pagar:</p>
+                        <ul>
+                            <li>Abra seu aplicativo bancário</li>
+                            <li>Selecione a opção PIX</li>
+                            <li>Escaneie o QR Code ou copie a chave</li>
+                            <li>Confirme o pagamento</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelPayment">Cancelar</button>
+                <button class="btn btn-primary" id="confirmPayment">Confirmar Pagamento</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Descrição do Produto -->
+    <div class="modal-overlay" id="descriptionModal">
+        <div class="modal description-modal">
+            <div class="modal-header">
+                <h3 id="productName">Detalhes do Produto</h3>
+                <button class="close-modal" id="closeDescriptionModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="product-details">
+                    <h4 id="detailTitle">Pacote de Cash</h4>
+                    <div class="product-price" id="detailPrice">R$ 0,00</div>
+                    
+                    <p id="detailDescription" style="margin: 1.5rem 0; color: #cbd5e1; white-space: pre-line;"></p>
+                    
+                    <ul class="product-features" id="detailFeatures">
+                        <!-- Features will be added via JS -->
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="addToCartBtn">Adicionar ao Carrinho</button>
+                <button class="btn btn-primary" id="buyNowBtn">Comprar Agora</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal de Conta -->
+    <div class="modal-overlay" id="accountModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>Minha Conta</h3>
+                <p>Informe seu nickname e tipo de conta</p>
+                <button class="close-modal" id="closeAccountModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="accountNickname">Nickname no Minecraft</label>
+                    <input type="text" id="accountNickname" class="form-control" placeholder="Digite seu nickname">
+                </div>
+                
+                <div class="form-group">
+                    <label>Tipo de Conta</label>
+                    <div class="account-type">
+                        <div class="account-type-btn" id="javaBtn">
+                            <i class="fab fa-java"></i>
+                            <p>Java Edition</p>
+                        </div>
+                        <div class="account-type-btn" id="bedrockBtn">
+                            <i class="fas fa-mobile-alt"></i>
+                            <p>Bedrock Edition</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="cancelAccount">Cancelar</button>
+                <button class="btn btn-primary" id="saveAccount">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dados dos produtos organizados por categoria
+        const products = {
+            cash: [
+                {
+                    id: 1,
+                    name: "10.000 Cash",
+                    price: 5.00,
+                    originalPrice: 10.00,
+                    cashAmount: 10000,
+                    description: "Pacote inicial de cash para começar no servidor",
+                    type: "cash",
+                    badge: "Popular",
+                    features: [
+                        "Cash instantâneo após confirmação",
+                        "Ideal para iniciantes",
+                        "Entrega automática no jogo"
+                    ],
+                    fullDescription: "🌟 Pacote de 10.000 Cash\n\nO pacote de 10.000 cash é ideal para jogadores que estão começando no servidor. Com este cash você poderá:\n\n- Comprar itens básicos\n- Adquirir equipamentos iniciais\n- Desbloquear vantagens essenciais\n- Progressão mais rápida no jogo",
+                    command: "cash add {player} 10000"
+                },
+                {
+                    id: 2,
+                    name: "20.000 Cash",
+                    price: 10.00,
+                    originalPrice: 20.00,
+                    cashAmount: 20000,
+                    description: "Pacote intermediário com excelente custo-benefício",
+                    type: "cash",
+                    badge: "Melhor Valor",
+                    features: [
+                        "Economia de R$ 5,00 em relação a 2 pacotes de 10k",
+                        "Cash instantâneo após confirmação",
+                        "Entrega automática no jogo"
+                    ],
+                    fullDescription: "✨ Pacote de 20.000 Cash\n\nO pacote de 20.000 cash oferece a melhor relação custo-benefício. Com ele você terá:\n\n- Recursos para itens de qualidade média\n- Participação em eventos especiais\n- Vantagens significativas no jogo\n- Progressão acelerada",
+                    command: "cash add {player} 20000"
+                },
+                {
+                    id: 3,
+                    name: "30.000 Cash",
+                    price: 15.00,
+                    originalPrice: 30.00,
+                    cashAmount: 30000,
+                    description: "Pacote avançado para jogadores regulares",
+                    type: "cash",
+                    badge: "Recomendado",
+                    features: [
+                        "33% mais cash por real que pacote de 20k",
+                        "Cash instantâneo após confirmação",
+                        "Entrega automática no jogo"
+                    ],
+                    fullDescription: "🚀 Pacote de 30.000 Cash\n\nPara jogadores regulares que buscam uma vantagem significativa, o pacote de 30.000 cash é a escolha ideal. Com este valor você poderá:\n\n- Adquirir itens raros\n- Participar de leilões exclusivos\n- Desbloquear áreas premium\n- Estabelecer-se como um dos principais jogadores",
+                    command: "cash add {player} 30000"
+                },
+                {
+                    id: 4,
+                    name: "100.000 Cash",
+                    price: 40.00,
+                    originalPrice: 80.00,
+                    cashAmount: 100000,
+                    description: "Pacote premium para quem busca vantagem máxima",
+                    type: "cash",
+                    badge: "Premium",
+                    features: [
+                        "Cash instantâneo após confirmação",
+                        "Entrega automática no jogo",
+                        "Bônus de 10.000 cash extra em relação a pacotes menores"
+                    ],
+                    fullDescription: "💎 Pacote de 100.000 Cash\n\nO pacote de 100.000 cash é perfeito para jogadores que querem dominar o servidor. Com este valor você terá:\n\n- Acesso aos melhores itens\n- Vantagens exclusivas\n- Domínio do servidor\n- Status de jogador premium",
+                    command: "cash add {player} 100000"
+                },
+                {
+                    id: 5,
+                    name: "1.000.000 Cash",
+                    price: 350.00,
+                    originalPrice: 700.00,
+                    cashAmount: 1000000,
+                    description: "Pacote máximo para jogadores premium",
+                    type: "cash",
+                    badge: "Máximo",
+                    features: [
+                        "Cash instantâneo após confirmação",
+                        "Entrega automática no jogo",
+                        "Bônus de 100.000 cash extra"
+                    ],
+                    fullDescription: "🔥 Pacote de 1.000.000 Cash\n\nO pacote máximo de 1.000.000 cash é para jogadores que querem dominar completamente o servidor. Com este valor você terá:\n\n- Acesso ilimitado a todos os itens\n- Vantagens exclusivas\n- Domínio total do servidor\n- Status de jogador lendário",
+                    command: "cash add {player} 1000000"
+                }
+            ],
+            
+            vips: [
+                {
+                    id: 6,
+                    name: "VIP Cavaleiro",
+                    price: 10.00,
+                    originalPrice: 20.00,
+                    duration: 30,
+                    description: "Benefícios exclusivos para iniciantes no servidor",
+                    type: "cavaleiro",
+                    badge: "Iniciante",
+                    features: [
+                        "Tag [Cavaleiro] no chat",
+                        "3 casas pessoais",
+                        "Acesso a /fly",
+                        "5 teleports diários",
+                        "Kit inicial especial"
+                    ],
+                    fullDescription: "🛡️ VIP Cavaleiro\n\nBenefícios exclusivos:\n\n- Tag [Cavaleiro] no chat\n- 3 casas pessoais\n- Acesso ao comando /fly\n- 5 teleports diários\n- Kit inicial especial\n- Criação de até 10 Homes\n- Kits diários, semanais e mensais\n- TPA instantâneo\n- Personalização de placas\n- Mensagens no chat com cores\n- Bônus de XP em habilidades\n- Comando /anunciar liberado\n- Comandos de venda (/vender, /vendertudo)\n- Retornar ao local de morte com /back\n- Habilidades de voo em claims",
+                    command: "lp user {player} parent set cavaleiro 30d"
+                },
+                {
+                    id: 7,
+                    name: "VIP Guerreiro",
+                    price: 20.00,
+                    originalPrice: 40.00,
+                    duration: 30,
+                    description: "Vantagens para jogadores intermediários",
+                    type: "guerreiro",
+                    badge: "Intermediário",
+                    features: [
+                        "Tag [Guerreiro] no chat",
+                        "5 casas pessoais",
+                        "Acesso a /fly e /craft",
+                        "10 teleports diários",
+                        "Kits especiais"
+                    ],
+                    fullDescription: "⚔️ VIP Guerreiro\n\nVantagens premium:\n\n- Tag [Guerreiro] no chat\n- 5 casas pessoais\n- Acesso aos comandos /fly e /craft\n- 10 teleports diários\n- Kits especiais\n- Criação de até 20 Homes\n- Kits diários, semanais e mensais\n- TPA instantâneo\n- Personalização de placas\n- Mensagens no chat com cores\n- Bônus de XP em habilidades\n- Comando /anunciar liberado\n- Comandos de venda (/vender, /vendertudo)\n- Comando /compactar\n- Retornar ao local de morte com /back\n- Habilidades de voo em claims\n- Sistema de AFK",
+                    command: "lp user {player} parent set guerreiro 30d"
+                },
+                {
+                    id: 8,
+                    name: "VIP Lord",
+                    price: 30.00,
+                    originalPrice: 50.00,
+                    duration: 30,
+                    description: "Experiência avançada para jogadores dedicados",
+                    type: "lord",
+                    badge: "Avançado",
+                    features: [
+                        "Tag [Lord] no chat",
+                        "10 casas pessoais",
+                        "Acesso completo a comandos",
+                        "Teleports ilimitados",
+                        "Kits premium"
+                    ],
+                    fullDescription: "👑 VIP Lord\n\nExperiência avançada:\n\n- Tag [Lord] no chat\n- 10 casas pessoais\n- Acesso completo a comandos VIP\n- Teleports ilimitados\n- Kits premium\n- Criação de até 30 Homes\n- Kits diários, semanais e mensais\n- TPA instantâneo\n- Personalização de placas\n- Mensagens no chat com cores\n- Bônus de XP em habilidades\n- Comando /anunciar liberado\n- Comandos de venda (/vender, /vendertudo)\n- Comando /compactar\n- Retornar ao local de morte com /back\n- Habilidades de voo em claims\n- Sistema de AFK",
+                    command: "lp user {player} parent set lord 30d"
+                },
+                {
+                    id: 9,
+                    name: "VIP Barão",
+                    price: 50.00,
+                    originalPrice: 80.00,
+                    duration: 30,
+                    description: "Máximo nível de vantagens para jogadores premium",
+                    type: "baron",
+                    badge: "Premium",
+                    features: [
+                        "Tag [Barão] no chat",
+                        "20 casas pessoais",
+                        "Todos os comandos liberados",
+                        "Vantagens exclusivas",
+                        "Kits VIP premium"
+                    ],
+                    fullDescription: "🌟 VIP Barão\n\nMáximo nível de vantagens:\n\n- Tag [Barão] no chat\n- 20 casas pessoais\n- Todos os comandos VIP liberados\n- Vantagens exclusivas\n- Kits VIP premium\n- Criação de até 40 Homes\n- Kits diários, semanais e mensais\n- TPA instantâneo\n- Personalização de placas\n- Mensagens no chat com cores\n- Bônus de XP em habilidades\n- Comando /anunciar liberado\n- Comandos de venda (/vender, /vendertudo)\n- Comando /compactar\n- Retornar ao local de morte com /back\n- Habilidades de voo completas\n- Sistema de AFK avançado",
+                    command: "lp user {player} parent set baron 30d"
+                }
+            ],
+            
+            keys: [
+                {
+                    id: 10,
+                    name: "Chave de Votação",
+                    price: 2.00,
+                    description: "Obtida ao votar no servidor",
+                    type: "keys",
+                    badge: "Gratuita",
+                    features: [
+                        "Chance de itens comuns",
+                        "Recompensas diárias",
+                        "Suporte ao servidor"
+                    ],
+                    fullDescription: "🔑 Chave de Votação\n\nBenefícios:\n\n- Chance de itens comuns\n- Recompensas diárias\n- Suporte ao servidor\n- Ideal para progresso inicial\n- Obtida ao votar no servidor",
+                    command: "key give {player} votacao 1"
+                },
+                {
+                    id: 11,
+                    name: "Chave Comum",
+                    price: 5.00,
+                    description: "Recompensas básicas para iniciantes",
+                    type: "keys",
+                    badge: "Básica",
+                    features: [
+                        "Itens de qualidade média",
+                        "Materiais de construção",
+                        "Recursos iniciais"
+                    ],
+                    fullDescription: "🗝️ Chave Comum\n\nRecompensas:\n\n- Itens de qualidade média\n- Materiais de construção\n- Recursos iniciais\n- Acelera seu progresso\n- Ideal para jogadores iniciantes",
+                    command: "key give {player} comum 1"
+                },
+                {
+                    id: 12,
+                    name: "Chave VIP",
+                    price: 10.00,
+                    description: "Recompensas exclusivas para VIPs",
+                    type: "keys",
+                    badge: "Exclusiva",
+                    features: [
+                        "Itens de qualidade superior",
+                        "Recursos raros",
+                        "Encantamentos especiais"
+                    ],
+                    fullDescription: "🔐 Chave VIP\n\nRecompensas premium:\n\n- Itens de qualidade superior\n- Recursos raros\n- Encantamentos especiais\n- Exclusiva para jogadores VIP\n- Não disponível para outros jogadores",
+                    command: "key give {player} vip 1"
+                },
+                {
+                    id: 13,
+                    name: "Chave Pandora",
+                    price: 75.00,
+                    originalPrice: 100.00,
+                    description: "A chave mais poderosa do servidor!",
+                    type: "keys",
+                    badge: "TOP DESTAQUE",
+                    features: [
+                        "Itens lendários exclusivos",
+                        "Recursos raros em grande quantidade",
+                        "Experiência massiva",
+                        "Chance de pets lendários",
+                        "Recompensas únicas"
+                    ],
+                    fullDescription: "🎁 Chave Pandora\n\nA chave mais poderosa do servidor! Cada chave garante:\n\n- 1 item lendário exclusivo\n- 5 recursos raros em grande quantidade\n- 50 níveis de experiência\n- 10% de chance de obter um pet lendário\n- Recompensas únicas não obtidas de outra forma\n\n⚠️ Limitada e disponível em pequena quantidade por temporada!",
+                    command: "key give {player} pandora 1"
+                }
+            ],
+            
+            op: [
+                {
+                    id: 14,
+                    name: "Espada do Sol",
+                    price: 25.00,
+                    description: "Espada lendária com fogo eterno",
+                    type: "op",
+                    badge: "Lendário",
+                    features: [
+                        "Dano: 25 ❤",
+                        "Efeito: Queima inimigos",
+                        "Encantamentos: Afiação VI, Fogo III, Inquebrável IV",
+                        "Durabilidade: Infinita",
+                        "Bônus: +30% de dano a mobs",
+                        "Efeito especial: Explosão ao matar inimigos"
+                    ],
+                    fullDescription: "🔥 Espada do Sol\n\nUma arma lendária forjada no núcleo do sol!\n\n🔹 Encantamentos exclusivos:\n- Afiação VI (Dano extremamente alto)\n- Fogo III (Queima os inimigos)\n- Inquebrável IV (Durabilidade infinita)\n- Saque III (Mais drops dos mobs)\n- Espectro I (Atinge inimigos próximos)\n\n🔹 Efeitos especiais:\n- 30% mais dano contra mobs\n- Explosão ao matar inimigos\n- Brilho intenso que afasta mobs hostis\n- Cura 1 coração a cada 3 golpes\n\n⚔️ Dano total: 25 corações (50 pontos de dano)",
+                    command: "give {player} netherite_sword{Enchantments:[{id:sharpness,lvl:6},{id:fire_aspect,lvl:3},{id:unbreaking,lvl:4},{id:looting,lvl:3},{id:sweeping,lvl:1}],display:{Name:'{\"text\":\"Espada do Sol\",\"color\":\"gold\",\"bold\":true}'}} 1"
+                },
+                {
+                    id: 15,
+                    name: "Armadura Celestial",
+                    price: 35.00,
+                    description: "Armadura divina com proteção máxima",
+                    type: "op",
+                    badge: "Épico",
+                    features: [
+                        "Proteção: 90% de redução de dano",
+                        "Efeito: Resistência a explosões",
+                        "Encantamentos: Proteção V, Inquebrável IV",
+                        "Bônus: Regeneração de vida",
+                        "Efeito especial: Voo temporário"
+                    ],
+                    fullDescription: "🛡️ Armadura Celestial\n\nProteção divina com máxima defesa!\n\n🔹 Encantamentos exclusivos:\n- Proteção V (Redução de dano máxima)\n- Inquebrável IV (Durabilidade extrema)\n- Respiração III (Respiração subaquática ilimitada)\n- Aqua Afinidade I (Minerar rápido na água)\n- Queda Pena IV (Nenhum dano de queda)\n\n🔹 Efeitos especiais:\n- Regeneração de 1 coração a cada 5 segundos\n- 5 segundos de voo ao pular (recarga de 10s)\n- Resistência a explosões e projéteis\n- Brilho que ilumina áreas escuras\n\n🛡️ Proteção total: Reduz 90% de todo o dano recebido",
+                    command: "give {player} netherite_helmet{Enchantments:[{id:protection,lvl:5},{id:unbreaking,lvl:4},{id:respiration,lvl:3},{id:aqua_affinity,lvl:1}],display:{Name:'{\"text\":\"Capacete Celestial\",\"color\":\"gold\",\"bold\":true}'}} 1\n" +
+                             "give {player} netherite_chestplate{Enchantments:[{id:protection,lvl:5},{id:unbreaking,lvl:4}],display:{Name:'{\"text\":\"Peitoral Celestial\",\"color\":\"gold\",\"bold\":true}'}} 1\n" +
+                             "give {player} netherite_leggings{Enchantments:[{id:protection,lvl:5},{id:unbreaking,lvl:4}],display:{Name:'{\"text\":\"Calças Celestiais\",\"color\":\"gold\",\"bold\":true}'}} 1\n" +
+                             "give {player} netherite_boots{Enchantments:[{id:protection,lvl:5},{id:unbreaking,lvl:4},{id:feather_falling,lvl:4}],display:{Name:'{\"text\":\"Botas Celestiais\",\"color\":\"gold\",\"bold\":true}'}} 1"
+                },
+                {
+                    id: 16,
+                    name: "Picareta Eficiência 7",
+                    price: 10.00,
+                    description: "Picareta super rápida para mineração",
+                    type: "op",
+                    badge: "Rápida",
+                    features: [
+                        "Velocidade de mineração extrema",
+                        "Encantamentos: Eficiência VII, Inquebrável III",
+                        "Durabilidade: 5000 usos",
+                        "Bônus: 10% de chance de duplicar minérios"
+                    ],
+                    fullDescription: "⛏️ Picareta Eficiência VII\n\nFerramenta perfeita para mineradores!\n\n🔹 Encantamentos:\n- Eficiência VII (Velocidade de mineração 7x)\n- Inquebrável III (Durabilidade aumentada)\n- Fortuna III (Mais drops de minérios)\n\n🔹 Efeitos especiais:\n- 10% de chance de duplicar minérios\n- Não quebra blocos adjacentes\n- Brilho suave em cavernas escuras",
+                    command: "give {player} netherite_pickaxe{Enchantments:[{id:efficiency,lvl:7},{id:unbreaking,lvl:3},{id:fortune,lvl:3}],display:{Name:'{\"text\":\"Picareta E7\",\"color\":\"gold\",\"bold\":true}'}} 1"
+                },
+                {
+                    id: 17,
+                    name: "Picareta Eficiência 8",
+                    price: 20.00,
+                    description: "Picareta ultra rápida para mineração",
+                    type: "op",
+                    badge: "Super Rápida",
+                    features: [
+                        "Velocidade de mineração insana",
+                        "Encantamentos: Eficiência VIII, Inquebrável IV",
+                        "Durabilidade: 7500 usos",
+                        "Bônus: 15% de chance de duplicar minérios"
+                    ],
+                    fullDescription: "⚡ Picareta Eficiência VIII\n\nUma das ferramentas mais rápidas disponíveis!\n\n🔹 Encantamentos:\n- Eficiência VIII (Velocidade de mineração 8x)\n- Inquebrável IV (Durabilidade extremamente alta)\n- Fortuna III (Mais drops de minérios)\n- Toque Suave I (Coletar blocos frágeis)\n\n🔹 Efeitos especiais:\n- 15% de chance de duplicar minérios\n- 5% de chance de não consumir durabilidade\n- Auto-repara 1 ponto de durabilidade a cada minuto",
+                    command: "give {player} netherite_pickaxe{Enchantments:[{id:efficiency,lvl:8},{id:unbreaking,lvl:4},{id:fortune,lvl:3},{id:silk_touch,lvl:1}],display:{Name:'{\"text\":\"Picareta E8\",\"color\":\"gold\",\"bold\":true}'}} 1"
+                },
+                {
+                    id: 18,
+                    name: "Picareta Eficiência 10",
+                    price: 25.00,
+                    originalPrice: 30.00,
+                    description: "Picareta lendária com mineração instantânea",
+                    type: "op",
+                    badge: "Lendária",
+                    features: [
+                        "Mineração quase instantânea",
+                        "Encantamentos: Eficiência X, Inquebrável V",
+                        "Durabilidade: 10000 usos",
+                        "Bônus: 20% de chance de duplicar minérios"
+                    ],
+                    fullDescription: "💎 Picareta Eficiência X\n\nA ferramenta definitiva para mineração!\n\n🔹 Encantamentos:\n- Eficiência X (Velocidade de mineração instantânea)\n- Inquebrável V (Durabilidade lendária)\n- Fortuna III (Mais drops de minérios)\n- Toque Suave I (Coletar blocos frágeis)\n- Reparação I (Auto-repara com experiência)\n\n🔹 Efeitos especiais:\n- 20% de chance de duplicar minérios\n- 10% de chance de não consumir durabilidade\n- Auto-repara 2 pontos de durabilidade a cada minuto\n- Brilho intenso que ilumina grandes áreas\n- Imune a perda ao morrer",
+                    command: "give {player} netherite_pickaxe{Enchantments:[{id:efficiency,lvl:10},{id:unbreaking,lvl:5},{id:fortune,lvl:3},{id:silk_touch,lvl:1},{id:mending,lvl:1}],display:{Name:'{\"text\":\"Picareta E10\",\"color\":\"gold\",\"bold\":true}'}} 1"
+                }
+            ],
+            
+            farms: [
+                {
+                    id: 19,
+                    name: "Farm de Abóbora",
+                    price: 15.00,
+                    description: "Produção automática de abóboras",
+                    type: "farms",
+                    badge: "Eficiente",
+                    features: [
+                        "Produção: 500 abóboras/hora",
+                        "Tamanho: 7x7 blocos",
+                        "Mecanismo: Pistons e observadores",
+                        "Entrega: Instalação automática"
+                    ],
+                    fullDescription: "🎃 Farm de Abóbora\n\nCaracterísticas:\n\n- Produção de 500 abóboras por hora\n- Tamanho compacto (7x7 blocos)\n- Mecanismo com pistons e observadores\n- Entrega com instalação automática\n- Conectável a sistema de coleta\n- Requer pouca intervenção",
+                    command: "farm install {player} pumpkin"
+                },
+                {
+                    id: 20,
+                    name: "Farm de Melancia",
+                    price: 15.00,
+                    description: "Produção automática de melancias",
+                    type: "farms",
+                    badge: "Eficiente",
+                    features: [
+                        "Produção: 500 melancias/hora",
+                        "Tamanho: 7x7 blocos",
+                        "Mecanismo: Pistons e observadores",
+                        "Entrega: Instalação automática"
+                    ],
+                    fullDescription: "🍉 Farm de Melancia\n\nCaracterísticas:\n\n- Produção de 500 melancias por hora\n- Tamanho compacto (7x7 blocos)\n- Mecanismo com pistons e observadores\n- Entrega com instalação automática\n- Conectável a sistema de coleta\n- Requer pouca intervenção",
+                    command: "farm install {player} melon"
+                },
+                {
+                    id: 21,
+                    name: "Farm de XP",
+                    price: 100.00,
+                    description: "Farm avançada para coleta de XP",
+                    type: "farms",
+                    badge: "TOP XP",
+                    features: [
+                        "70 spawners de esqueleto",
+                        "80 spawners de zumbi",
+                        "70 spawners de blaze",
+                        "Minion coletor e vendedor"
+                    ],
+                    fullDescription: "✨ Farm de XP\n\nSolução definitiva para XP ilimitado!\n\n🔹 Composição:\n- 70 spawners de esqueleto\n- 80 spawners de zumbi\n- 70 spawners de blaze\n\n🔹 Sistema:\n- Spawners otimizados para máxima eficiência\n- Minion coletor e vendedor\n- Coleta automática de XP\n- Sem necessidade de intervenção",
+                    command: "farm install {player} xp"
+                },
+                {
+                    id: 22,
+                    name: "Farm de Ferro",
+                    price: 120.00,
+                    originalPrice: 180.00,
+                    description: "Produção massiva de barras de ferro",
+                    type: "farms",
+                    badge: "Premium",
+                    features: [
+                        "8 spawners de Iron Golem",
+                        "Sistema de coleta automática",
+                        "Minion coletor e vendedor",
+                        "Produção: 10.000 barras/hora"
+                    ],
+                    fullDescription: "⚙️ Farm de Ferro\n\nProdução massiva de barras de ferro!\n\n🔹 Composição:\n- 8 spawners de Iron Golem\n\n🔹 Sistema:\n- Coleta automática\n- Minion coletor e vendedor\n- Produção de 10.000 barras/hora\n- Fluxo constante de recursos\n- Sem coleta manual necessária",
+                    command: "farm install {player} iron"
+                },
+                {
+                    id: 23,
+                    name: "Farm de Pólvora",
+                    price: 140.00,
+                    originalPrice: 200.00,
+                    description: "Produção em massa de pólvora",
+                    type: "farms",
+                    badge: "Explosiva",
+                    features: [
+                        "35 spawners de creeper",
+                        "Sistema de coleta seguro",
+                        "Minion coletor e vendedor",
+                        "Produção: 5.000 pólvora/hora"
+                    ],
+                    fullDescription: "💥 Farm de Pólvora\n\nPerfeita para grandes quantidades de explosivos!\n\n🔹 Composição:\n- 35 spawners de creeper\n\n🔹 Sistema:\n- Coleta segura\n- Minion coletor e vendedor\n- Produção de 5.000 pólvora/hora\n- Pólvora ilimitada para projetos\n- Sistema anti-explosão",
+                    command: "farm install {player} gunpowder"
+                },
+                {
+                    id: 24,
+                    name: "Farm de Ovelha",
+                    price: 300.00,
+                    originalPrice: 450.00,
+                    description: "Produção automática de lã e carne",
+                    type: "farms",
+                    badge: "TOP Farm",
+                    features: [
+                        "230 spawners de ovelha",
+                        "Sistema de tosquia automática",
+                        "Minion coletor e vendedor",
+                        "Produção: 15.000 lã/hora"
+                    ],
+                    fullDescription: "🐑 Farm de Ovelha\n\nA maior e mais eficiente do servidor!\n\n🔹 Composição:\n- 230 spawners de ovelha\n\n🔹 Sistema:\n- Tosquia automática\n- Minion coletor e vendedor\n- Produção de 15.000 lã/hora\n- Carne ilimitada\n- Todos recursos coletados automaticamente",
+                    command: "farm install {player} sheep"
+                }
+            ],
+            
+            spawners: [
+                {
+                    id: 25,
+                    name: "Spawner de Esqueleto",
+                    price: 3.00,
+                    description: "Gera esqueletos para XP e ossos",
+                    type: "spawners",
+                    badge: "XP",
+                    features: [
+                        "Velocidade: 15 mobs/minuto",
+                        "Sistema: Coleta automática",
+                        "Bônus: Esqueletos com armaduras",
+                        "Segurança: Sistema anti-AG"
+                    ],
+                    fullDescription: "💀 Spawner de Esqueleto\n\nCaracterísticas:\n\n- Gera 15 esqueletos por minuto\n- Coleta automática de XP e ossos\n- Chance de esqueletos com armaduras encantadas\n- Sistema anti-AG\n- Ideal para farms de XP",
+                    command: "spawner give {player} skeleton"
+                },
+                {
+                    id: 26,
+                    name: "Spawner de Iron Golem",
+                    price: 25.00,
+                    description: "Gera Iron Golems para ferro",
+                    type: "spawners",
+                    badge: "Ferro",
+                    features: [
+                        "Velocidade: 5 golems/minuto",
+                        "Sistema: Coleta automática",
+                        "Segurança: Sistema anti-dano"
+                    ],
+                    fullDescription: "🤖 Spawner de Iron Golem\n\nCaracterísticas:\n\n- Gera 5 golems por minuto\n- Coleta automática de ferro\n- Sistema de coleta segura\n- Proteção contra danos ao jogador\n- Ideal para coleta de ferro",
+                    command: "spawner give {player} iron_golem"
+                },
+                {
+                    id: 27,
+                    name: "Spawner de Zumbi",
+                    price: 3.00,
+                    description: "Gera zumbis para XP e carne",
+                    type: "spawners",
+                    badge: "XP",
+                    features: [
+                        "Velocidade: 20 mobs/minuto",
+                        "Sistema: Coleta automática",
+                        "Bônus: Zumbis com equipamentos"
+                    ],
+                    fullDescription: "🧟 Spawner de Zumbi\n\nCaracterísticas:\n\n- Gera 20 zumbis por minuto\n- Coleta automática de XP e carne podre\n- Chance de zumbis com equipamentos encantados\n- Ideal para farms de XP\n- Sistema automático eficiente",
+                    command: "spawner give {player} zombie"
+                },
+                {
+                    id: 28,
+                    name: "Spawner de Aranha",
+                    price: 2.00,
+                    description: "Gera aranhas para XP e fios",
+                    type: "spawners",
+                    badge: "Fios",
+                    features: [
+                        "Velocidade: 12 mobs/minuto",
+                        "Sistema: Coleta automática",
+                        "Segurança: Sistema anti-veneno"
+                    ],
+                    fullDescription: "🕷️ Spawner de Aranha\n\nCaracterísticas:\n\n- Gera 12 aranhas por minuto\n- Coleta automática de fios e XP\n- Sistema de coleta segura\n- Proteção contra veneno\n- Ideal para coleta de fios",
+                    command: "spawner give {player} spider"
+                },
+                {
+                    id: 29,
+                    name: "Spawner de Ovelha",
+                    price: 5.00,
+                    description: "Gera ovelhas para lã e carne",
+                    type: "spawners",
+                    badge: "Lã",
+                    features: [
+                        "Velocidade: 10 ovelhas/minuto",
+                        "Sistema: Tosquia automática",
+                        "Bônus: Ovelhas coloridas"
+                    ],
+                    fullDescription: "🐑 Spawner de Ovelha\n\nCaracterísticas:\n\n- Gera 10 ovelhas por minuto\n- Tosquia automática para produção de lã\n- Coleta de carne\n- Chance de ovelhas coloridas para lã especial\n- Ideal para projetos de construção",
+                    command: "spawner give {player} sheep"
+                }
+            ],
+            
+            rares: [
+                {
+                    id: 30,
+                    name: "Ovo de Dragão",
+                    price: 50.00,
+                    description: "Item mais raro do servidor",
+                    type: "rares",
+                    badge: "Lendário",
+                    features: [
+                        "Usos: Criar pet dragão",
+                        "Efeito: Status máximo",
+                        "Exclusivo: 1 por servidor",
+                        "Bônus: Voo ilimitado"
+                    ],
+                    fullDescription: "🐉 Ovo de Dragão\n\nO item mais raro do servidor!\n\n- Cria um pet dragão\n- Concede status máximos\n- Voo ilimitado\n- Exclusivo: apenas 1 por servidor\n- Extremamente valioso e colecionável",
+                    command: "give {player} dragon_egg"
+                },
+                {
+                    id: 31,
+                    name: "Cabeça do Herobrine",
+                    price: 40.00,
+                    description: "Item de colecionador raro",
+                    type: "rares",
+                    badge: "Mítico",
+                    features: [
+                        "Efeito: Invisibilidade temporária",
+                        "Bônus: Visão noturna permanente",
+                        "Colecionável: Edição limitada",
+                        "Status: +10% de dano"
+                    ],
+                    fullDescription: "👻 Cabeça do Herobrine\n\nItem de colecionador raro!\n\n🔹 Benefícios:\n- Invisibilidade temporária\n- Visão noturna permanente\n- +10% de dano enquanto equipada\n\n🔹 Características:\n- Edição limitada\n- Extremamente raro\n- Status de colecionador premium",
+                    command: "give {player} player_head{SkullOwner:\"Herobrine\",display:{Name:'{\"text\":\"Cabeça do Herobrine\",\"color\":\"red\",\"bold\":true}'}} 1"
+                }
+            ],
+            
+            claims: [
+                {
+                    id: 32,
+                    name: "Bloco de Claim",
+                    price: 5.00,
+                    description: "Proteja uma área de 16x16 blocos no servidor",
+                    type: "claims",
+                    features: [
+                        "Proteção de área 16x16",
+                        "Segurança contra roubos",
+                        "Personalização de permissões",
+                        "Previne destruição não autorizada"
+                    ],
+                    fullDescription: "🛡️ Bloco de Claim\n\nProteja sua área no servidor!\n\n🔹 Como usar:\n1. Coloque o bloco no centro da área\n2. Use /claim para ativar\n3. Configure permissões com /trust [jogador]\n\n🔹 Benefícios:\n- Proteção contra roubos e destruição\n- Permissões personalizáveis\n- Área segura para construir e armazenar\n- Compatível com outros sistemas",
+                    command: "give {player} claim_block 1"
+                },
+                {
+                    id: 33,
+                    name: "Pacote de 5 Blocos",
+                    price: 20.00,
+                    description: "Proteja grandes áreas com este pacote econômico",
+                    type: "claims",
+                    badge: "Economia",
+                    features: [
+                        "5 blocos de claim",
+                        "Proteção para 80x80 blocos",
+                        "Economia de R$ 5,00",
+                        "Ideal para bases grandes"
+                    ],
+                    fullDescription: "📦 Pacote de 5 Blocos de Claim\n\nProteja grandes áreas com economia!\n\n🔹 Como usar:\n1. Coloque cada bloco no centro das áreas\n2. Use /claim para ativar cada proteção\n3. Conecte áreas adjacentes\n\n🔹 Benefícios:\n- Proteção para grandes bases\n- Economia de R$ 5,00\n- Segurança para múltiplas áreas\n- Ideal para guildas e times",
+                    command: "give {player} claim_block 5"
+                }
+            ],
+            
+            powers: [
+                {
+                    id: 34,
+                    name: "Claim Fly Infinito",
+                    price: 20.00,
+                    description: "Voe livremente em seus claims",
+                    type: "powers",
+                    badge: "Premium",
+                    features: [
+                        "Voo ilimitado em áreas protegidas",
+                        "Sem tempo de recarga",
+                        "Compatível com todos os VIPs",
+                        "Ativação instantânea"
+                    ],
+                    fullDescription: "✈️ Claim Fly Infinito\n\nVoe livremente em seus claims!\n\n- Voo ilimitado em áreas protegidas\n- Sem tempo de recarga\n- Compatível com todos os VIPs\n- Ativação instantânea\n- Perfeito para construção de grandes estruturas",
+                    command: "power give {player} claimfly"
+                },
+                {
+                    id: 35,
+                    name: "TP sem Tempo",
+                    price: 10.00,
+                    description: "Teletransporte instantâneo",
+                    type: "powers",
+                    badge: "Rápido",
+                    features: [
+                        "Teletransporte instantâneo",
+                        "Sem tempo de espera",
+                        "Compatível com todos os jogadores",
+                        "Usos ilimitados"
+                    ],
+                    fullDescription: "⚡ TP sem Tempo\n\nTeletransporte instantâneo!\n\n- Teletransporte imediato para outros jogadores\n- Sem tempo de espera\n- Compatível com todos os jogadores\n- Usos ilimitados\n- Ideal para situações de emergência",
+                    command: "power give {player} instanttp"
+                },
+                {
+                    id: 36,
+                    name: "Super Quebra",
+                    price: 60.00,
+                    description: "Quebre blocos instantaneamente",
+                    type: "powers",
+                    badge: "TOP Poder",
+                    features: [
+                        "Quebra instantânea de blocos",
+                        "Funciona com qualquer ferramenta",
+                        "Economia de tempo máxima",
+                        "Ideal para mineração em larga escala"
+                    ],
+                    fullDescription: "💥 Super Quebra\n\nQuebre blocos instantaneamente!\n\n- Quebra instantânea de qualquer bloco\n- Funciona com qualquer ferramenta\n- Economia máxima de tempo\n- Ideal para mineração em larga escala\n- Transforma suas sessões de mineração",
+                    command: "power give {player} instabreak"
+                }
+            ],
+            
+            minions: [
+                {
+                    id: 37,
+                    name: "Minion Minerador",
+                    price: 10.00,
+                    description: "Coleta minérios automaticamente",
+                    type: "minions",
+                    badge: "Básico",
+                    features: [
+                        "Coleta: Pedra, carvão, ferro",
+                        "Velocidade: 100 blocos/hora",
+                        "Armazenamento: 9 slots",
+                        "Auto-reabastecimento"
+                    ],
+                    fullDescription: "⛏️ Minion Minerador\n\nColeta automática de minérios!\n\n- Coleta pedra, carvão e ferro\n- Velocidade: 100 blocos/hora\n- Armazenamento: 9 slots\n- Auto-reabastecimento\n- Funciona em área designada",
+                    command: "minion give {player} miner"
+                },
+                {
+                    id: 38,
+                    name: "Minion Vendedor",
+                    price: 25.00,
+                    description: "Vende itens automaticamente",
+                    type: "minions",
+                    badge: "Econômico",
+                    features: [
+                        "Vende até 64 tipos de itens",
+                        "Taxa de venda: 95% do valor",
+                        "Armazenamento: 18 slots",
+                        "Interface configurável"
+                    ],
+                    fullDescription: "💰 Minion Vendedor\n\nVende itens automaticamente por cash!\n\n- Vende até 64 tipos de itens\n- Taxa de venda: 95% do valor\n- Armazenamento: 18 slots\n- Interface configurável\n- Garante renda passiva constante",
+                    command: "minion give {player} seller"
+                },
+                {
+                    id: 39,
+                    name: "Minion Lenhador",
+                    price: 20.00,
+                    description: "Coleta madeira automaticamente",
+                    type: "minions",
+                    badge: "Madeira",
+                    features: [
+                        "Coleta todos os tipos de madeira",
+                        "Velocidade: 80 blocos/hora",
+                        "Replanta árvores automaticamente",
+                        "Armazenamento: 12 slots"
+                    ],
+                    fullDescription: "🌲 Minion Lenhador\n\nColeta madeira e replanta árvores!\n\n- Coleta todos os tipos de madeira\n- Velocidade: 80 blocos/hora\n- Replanta árvores automaticamente\n- Armazenamento: 12 slots\n- Ideal para construção e crafting",
+                    command: "minion give {player} lumberjack"
+                },
+                {
+                    id: 40,
+                    name: "Minion Coletor",
+                    price: 30.00,
+                    description: "Coleta drops de mobs automaticamente",
+                    type: "minions",
+                    badge: "Coleta",
+                    features: [
+                        "Coleta drops de mobs em 20 blocos",
+                        "Armazenamento: 24 slots",
+                        "Filtro configurável",
+                        "Auto-combate a mobs hostis"
+                    ],
+                    fullDescription: "🎒 Minion Coletor\n\nColeta drops de mobs automaticamente!\n\n- Coleta em raio de 20 blocos\n- Armazenamento: 24 slots\n- Filtro configurável\n- Sistema de combate básico\n- Defende-se de mobs hostis",
+                    command: "minion give {player} collector"
+                },
+                {
+                    id: 41,
+                    name: "Minion Crafter",
+                    price: 30.00,
+                    description: "Crafta itens automaticamente",
+                    type: "minions",
+                    badge: "Produção",
+                    features: [
+                        "Crafta até 100 receitas diferentes",
+                        "Velocidade: 1 item/segundo",
+                        "Armazenamento: 36 slots",
+                        "Auto-coleta de recursos"
+                    ],
+                    fullDescription: "🔨 Minion Crafter\n\nAutomatiza o processo de crafting!\n\n- Crafta até 100 receitas diferentes\n- Velocidade: 1 item/segundo\n- Armazenamento: 36 slots\n- Auto-coleta de recursos\n- Ideal para produção em massa",
+                    command: "minion give {player} crafter"
+                },
+                {
+                    id: 42,
+                    name: "Minion Pescador",
+                    price: 10.00,
+                    description: "Pesca itens automaticamente",
+                    type: "minions",
+                    badge: "Pesca",
+                    features: [
+                        "Pesca itens a cada 30 segundos",
+                        "Chance de itens raros",
+                        "Armazenamento: 9 slots",
+                        "Auto-reparo de vara de pesca"
+                    ],
+                    fullDescription: "🎣 Minion Pescador\n\nPesca itens automaticamente!\n\n- Pesca a cada 30 segundos\n- Chance de itens raros e encantados\n- Armazenamento: 9 slots\n- Auto-repara vara de pesca\n- Ideal para coleta de recursos aquáticos",
+                    command: "minion give {player} fisher"
+                },
+                {
+                    id: 43,
+                    name: "Minion Fazendeiro",
+                    price: 15.00,
+                    description: "Planta e colhe automaticamente",
+                    type: "minions",
+                    badge: "Agricultura",
+                    features: [
+                        "Planta e colhe plantações",
+                        "Suporte a todas as culturas",
+                        "Velocidade: 50 blocos/hora",
+                        "Armazenamento: 18 slots"
+                    ],
+                    fullDescription: "🌱 Minion Fazendeiro\n\nAutomatiza todo o processo agrícola!\n\n- Planta e colhe plantações\n- Suporte a todas as culturas\n- Velocidade: 50 blocos/hora\n- Armazenamento: 18 slots\n- Fornecimento constante de recursos agrícolas",
+                    command: "minion give {player} farmer"
+                },
+                {
+                    id: 44,
+                    name: "Minion Matador",
+                    price: 30.00,
+                    description: "Elimina mobs automaticamente",
+                    type: "minions",
+                    badge: "Combate",
+                    features: [
+                        "Elimina mobs em 15 blocos",
+                        "Coleta drops automaticamente",
+                        "Níveis de XP automáticos",
+                        "Armazenamento: 24 slots"
+                    ],
+                    fullDescription: "⚔️ Minion Matador\n\nElimina mobs e coleta drops automaticamente!\n\n- Elimina mobs em raio de 15 blocos\n- Coleta drops automaticamente\n- Acumula níveis de XP\n- Armazenamento: 24 slots\n- Perfeito para farms de XP",
+                    command: "minion give {player} killer"
+                }
+            ],
+            
+            tags: [
+                {
+                    id: 45,
+                    name: "Tag Personalizada (Mensal)",
+                    price: 5.00,
+                    duration: 30,
+                    description: "Personalize seu nome no chat",
+                    type: "tags",
+                    badge: "Personalização",
+                    features: [
+                        "Tag colorida antes do nome",
+                        "Personalização mensal",
+                        "Até 10 caracteres",
+                        "Suporte a cores e formatação"
+                    ],
+                    fullDescription: "🏷️ Tag Personalizada (Mensal)\n\nPersonalize seu nome no chat!\n\n- Tag colorida antes do nome\n- Personalização mensal\n- Até 10 caracteres\n- Suporte a cores e formatação\n- Destaque-se no servidor",
+                    command: "tag set {player} {tag} 30d"
+                },
+                {
+                    id: 46,
+                    name: "Tag Personalizada (Permanente)",
+                    price: 30.00,
+                    description: "Personalização permanente do seu nome",
+                    type: "tags",
+                    badge: "VIP",
+                    features: [
+                        "Tag colorida permanente",
+                        "Personalização ilimitada",
+                        "Até 15 caracteres",
+                        "Suporte a cores, gradientes e formatação"
+                    ],
+                    fullDescription: "💫 Tag Personalizada (Permanente)\n\nPersonalização permanente do seu nome!\n\n- Tag colorida permanente\n- Personalização ilimitada\n- Até 15 caracteres\n- Suporte a cores, gradientes e formatação\n- Destaque-se permanentemente",
+                    command: "tag set {player} {tag} permanent"
+                }
+            ]
+        };
+
+        // Cupons válidos
+        const validCoupons = {
+            "SOLARIO20": { type: 'percent', value: 20, title: "20% de Desconto" },
+            "CASH50": { type: 'fixed', value: 50, title: "R$50 de Desconto" },
+            "VIP100": { type: 'free', value: 100, title: "Crédito Gratuito R$100" }
+        };
+
+        // Carrinho de compras
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let currentProduct = null;
+        let appliedCoupon = null;
+        let accountType = localStorage.getItem('accountType') || 'java'; // 'java' ou 'bedrock'
+        let accountNickname = localStorage.getItem('accountNickname') || '';
+        
+        // Elementos DOM
+        const cartCount = document.getElementById('cartCount');
+        const floatingCartCount = document.getElementById('floatingCartCount');
+        const cashProductsContainer = document.getElementById('cashProductsContainer');
+        const vipProductsContainer = document.getElementById('vipProductsContainer');
+        const keysProductsContainer = document.getElementById('keysProductsContainer');
+        const opProductsContainer = document.getElementById('opProductsContainer');
+        const farmsProductsContainer = document.getElementById('farmsProductsContainer');
+        const spawnersProductsContainer = document.getElementById('spawnersProductsContainer');
+        const raresProductsContainer = document.getElementById('raresProductsContainer');
+        const claimsProductsContainer = document.getElementById('claimsProductsContainer');
+        const minionsProductsContainer = document.getElementById('minionsProductsContainer');
+        const powersProductsContainer = document.getElementById('powersProductsContainer');
+        const tagsProductsContainer = document.getElementById('tagsProductsContainer');
+        const floatingCartBtn = document.getElementById('floatingCartBtn');
+        const cartBtn = document.getElementById('cartBtn');
+        const accountBtn = document.getElementById('accountBtn');
+        const paymentModal = document.getElementById('paymentModal');
+        const closePaymentModal = document.getElementById('closePaymentModal');
+        const cancelPayment = document.getElementById('cancelPayment');
+        const confirmPayment = document.getElementById('confirmPayment');
+        const descriptionModal = document.getElementById('descriptionModal');
+        const closeDescriptionModal = document.getElementById('closeDescriptionModal');
+        const accountModal = document.getElementById('accountModal');
+        const closeAccountModal = document.getElementById('closeAccountModal');
+        const cancelAccount = document.getElementById('cancelAccount');
+        const saveAccount = document.getElementById('saveAccount');
+        const accountNicknameInput = document.getElementById('accountNickname');
+        const javaBtn = document.getElementById('javaBtn');
+        const bedrockBtn = document.getElementById('bedrockBtn');
+        const applyCouponBtn = document.getElementById('applyCoupon');
+        const couponMessage = document.getElementById('couponMessage');
+        const orderItems = document.getElementById('orderItems');
+        const orderTotal = document.getElementById('orderTotal');
+        const addToCartBtn = document.getElementById('addToCartBtn');
+        const buyNowBtn = document.getElementById('buyNowBtn');
+        const viewPandoraBtn = document.getElementById('viewPandoraBtn');
+        const buyPandoraBtn = document.getElementById('buyPandoraBtn');
+        const viewCashBtn = document.getElementById('viewCashBtn');
+        const buyCashBtn = document.getElementById('buyCashBtn');
+        const pixQrcode = document.getElementById('pix-qrcode');
+        const uploadArea = document.getElementById('uploadArea');
+        const proofInput = document.getElementById('proofInput');
+        const filePreview = document.getElementById('filePreview');
+        const fileName = document.getElementById('fileName');
+        const removeFileBtn = document.getElementById('removeFileBtn');
+        const userNote = document.getElementById('userNote');
+        
+        // Chave PIX
+        const pixKey = "00020126600014br.gov.bcb.pix0114+55849913674160220dnstrhqrhahatjtahhjj5204000053039865802BR5924MURILO MEDEIROS DE PAIVA6009Sao Paulo62190515abatbarbrarabar63040A85";
+
+        // Webhook do Discord
+        const discordWebhookURL = "https://discord.com/api/webhooks/1372166543533932615/ptP-d6GSde3oDo6i-8kT0jFxs01aguzP16__1QR9obzo7rvoplqpbIWCn_1hTBjdX5sX";
+
+        // Inicialização
+        function init() {
+            renderProducts();
+            updateCartCount();
+            loadAccountInfo();
+            
+            // Event Listeners
+            floatingCartBtn.addEventListener('click', () => {
+                openPaymentModal();
+            });
+            
+            cartBtn.addEventListener('click', openPaymentModal);
+            accountBtn.addEventListener('click', openAccountModal);
+            
+            closePaymentModal.addEventListener('click', () => toggleModal(paymentModal, false));
+            cancelPayment.addEventListener('click', () => toggleModal(paymentModal, false));
+            confirmPayment.addEventListener('click', confirmPurchase);
+            closeDescriptionModal.addEventListener('click', () => toggleModal(descriptionModal, false));
+            closeAccountModal.addEventListener('click', () => toggleModal(accountModal, false));
+            cancelAccount.addEventListener('click', () => toggleModal(accountModal, false));
+            saveAccount.addEventListener('click', saveAccountInfo);
+            applyCouponBtn.addEventListener('click', applyCoupon);
+            addToCartBtn.addEventListener('click', () => {
+                if (currentProduct) {
+                    addToCart(currentProduct);
+                    toggleModal(descriptionModal, false);
+                }
+            });
+            buyNowBtn.addEventListener('click', () => {
+                if (currentProduct) {
+                    buyNow(currentProduct);
+                }
+            });
+            
+            // Eventos para a Chave Pandora
+            viewPandoraBtn.addEventListener('click', () => {
+                const pandoraKey = products.keys.find(p => p.id === 13);
+                if (pandoraKey) showProductDetails(pandoraKey);
+            });
+            buyPandoraBtn.addEventListener('click', () => {
+                const pandoraKey = products.keys.find(p => p.id === 13);
+                if (pandoraKey) buyNow(pandoraKey);
+            });
+            
+            // Eventos para o Cash em destaque
+            viewCashBtn.addEventListener('click', () => {
+                const cashProduct = products.cash.find(p => p.id === 1);
+                if (cashProduct) showProductDetails(cashProduct);
+            });
+            buyCashBtn.addEventListener('click', () => {
+                const cashProduct = products.cash.find(p => p.id === 1);
+                if (cashProduct) buyNow(cashProduct);
+            });
+            
+            // Eventos para tipo de conta
+            javaBtn.addEventListener('click', () => {
+                javaBtn.classList.add('active');
+                bedrockBtn.classList.remove('active');
+                accountType = 'java';
+            });
+            
+            bedrockBtn.addEventListener('click', () => {
+                bedrockBtn.classList.add('active');
+                javaBtn.classList.remove('active');
+                accountType = 'bedrock';
+            });
+            
+            // Eventos para upload de comprovante
+            uploadArea.addEventListener('click', () => proofInput.click());
+            proofInput.addEventListener('change', handleFileSelect);
+            removeFileBtn.addEventListener('click', removeFile);
+            
+            // Gerar QR Code PIX
+            new QRCode(pixQrcode, {
+                text: pixKey,
+                width: 180,
+                height: 180,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+        
+        // Carregar informações da conta
+        function loadAccountInfo() {
+            accountNicknameInput.value = accountNickname;
+            
+            if (accountType === 'java') {
+                javaBtn.classList.add('active');
+                bedrockBtn.classList.remove('active');
+            } else {
+                bedrockBtn.classList.add('active');
+                javaBtn.classList.remove('active');
+            }
+        }
+        
+        // Salvar informações da conta
+        function saveAccountInfo() {
+            let nickname = accountNicknameInput.value.trim();
+            
+            // Adicionar ponto se for conta bedrock e não tiver
+            if (accountType === 'bedrock' && !nickname.startsWith('.')) {
+                nickname = '.' + nickname;
+            }
+            
+            // Remover ponto se for conta java e tiver
+            if (accountType === 'java' && nickname.startsWith('.')) {
+                nickname = nickname.substring(1);
+            }
+            
+            accountNickname = nickname;
+            localStorage.setItem('accountNickname', accountNickname);
+            localStorage.setItem('accountType', accountType);
+            
+            showNotification("Informações da conta salvas com sucesso!");
+            toggleModal(accountModal, false);
+        }
+        
+        // Abrir modal de conta
+        function openAccountModal() {
+            toggleModal(accountModal, true);
+        }
+        
+        // Renderizar todos os produtos
+        function renderProducts() {
+            renderCategoryProducts('cash', cashProductsContainer);
+            renderCategoryProducts('vips', vipProductsContainer);
+            renderCategoryProducts('keys', keysProductsContainer);
+            renderCategoryProducts('op', opProductsContainer);
+            renderCategoryProducts('farms', farmsProductsContainer);
+            renderCategoryProducts('spawners', spawnersProductsContainer);
+            renderCategoryProducts('rares', raresProductsContainer);
+            renderCategoryProducts('claims', claimsProductsContainer);
+            renderCategoryProducts('powers', powersProductsContainer);
+            renderCategoryProducts('minions', minionsProductsContainer);
+            renderCategoryProducts('tags', tagsProductsContainer);
+        }
+        
+        // Renderizar produtos de uma categoria específica
+        function renderCategoryProducts(category, container) {
+            container.innerHTML = '';
+            
+            if (products[category] && products[category].length > 0) {
+                products[category].forEach(product => {
+                    const productCard = createProductCard(product);
+                    container.appendChild(productCard);
+                });
+            }
+        }
+        
+        // Criar card de produto
+        function createProductCard(product) {
+            const productCard = document.createElement('div');
+            let icon = 'fa-coins';
+            let typeClass = '';
+            
+            if (product.type === "cash") {
+                icon = 'fa-coins';
+                typeClass = 'cash';
+            } else if (product.type === "cavaleiro" || product.type === "guerreiro" || 
+                       product.type === "lord" || product.type === "baron") {
+                icon = 'fa-crown';
+                typeClass = `vip-${product.type}`;
+            } else if (product.type === "op") {
+                icon = 'fa-gem';
+                typeClass = 'op';
+            } else if (product.type === "keys") {
+                icon = 'fa-key';
+                typeClass = 'keys';
+            } else if (product.type === "farms") {
+                icon = 'fa-tractor';
+                typeClass = 'farms';
+            } else if (product.type === "spawners") {
+                icon = 'fa-ghost';
+                typeClass = 'spawners';
+            } else if (product.type === "rares") {
+                icon = 'fa-dragon';
+                typeClass = 'rares';
+            } else if (product.type === "claims") {
+                icon = 'fa-shield-alt';
+                typeClass = 'claims';
+            } else if (product.type === "minions") {
+                icon = 'fa-robot';
+                typeClass = 'minions';
+            } else if (product.type === "powers") {
+                icon = 'fa-magic';
+                typeClass = 'powers';
+            } else if (product.type === "tags") {
+                icon = 'fa-tag';
+                typeClass = 'tags';
+            }
+            
+            productCard.className = `product-card ${typeClass}`;
+            
+            // Usar imagem se disponível, senão usar ícone
+            const imageContent = product.imageUrl ? 
+                `<div class="product-image" style="background-image: url('${product.imageUrl}');"></div>` :
+                `<div class="product-image">
+                    <i class="fas ${icon}"></i>
+                </div>`;
+            
+            productCard.innerHTML = `
+                ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                ${imageContent}
+                <div class="product-info">
+                    <h3 class="product-title">${product.name}</h3>
+                    <p class="product-description">${product.description}</p>
+                    <div class="product-meta">
+                        ${product.originalPrice ? `
+                            <div class="product-price" style="text-decoration: line-through; color: #94a3b8;">R$ ${product.originalPrice.toFixed(2)}</div>
+                            <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                        ` : `
+                            <div class="product-price">R$ ${product.price.toFixed(2)}</div>
+                        `}
+                        ${product.cashAmount ? 
+                            `<div class="product-cash">${product.cashAmount.toLocaleString()} Cash</div>` : 
+                            (product.duration ? `<div class="product-duration">${product.duration} dias</div>` : '')
+                        }
+                    </div>
+                    <div class="product-actions">
+                        <button class="btn-icon view-details" data-id="${product.id}" data-type="${product.type}" title="Ver detalhes">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn-icon add-cart" data-id="${product.id}" data-type="${product.type}" title="Adicionar ao carrinho">
+                            <i class="fas fa-cart-plus"></i>
+                        </button>
+                        <button class="btn-buy buy-now" data-id="${product.id}" data-type="${product.type}">
+                            <i class="fas fa-bolt"></i> Comprar Agora
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            // Adicionar eventos
+            const viewDetailsBtn = productCard.querySelector('.view-details');
+            const addCartBtn = productCard.querySelector('.add-cart');
+            const buyNowBtn = productCard.querySelector('.buy-now');
+            
+            viewDetailsBtn.addEventListener('click', () => {
+                const productId = parseInt(viewDetailsBtn.dataset.id);
+                const productType = viewDetailsBtn.dataset.type;
+                showProductDetails(findProductById(productId));
+            });
+            
+            addCartBtn.addEventListener('click', () => {
+                const productId = parseInt(addCartBtn.dataset.id);
+                const productType = addCartBtn.dataset.type;
+                addToCart(findProductById(productId));
+            });
+            
+            buyNowBtn.addEventListener('click', () => {
+                const productId = parseInt(buyNowBtn.dataset.id);
+                const productType = buyNowBtn.dataset.type;
+                buyNow(findProductById(productId));
+            });
+            
+            return productCard;
+        }
+        
+        // Encontrar produto por ID
+        function findProductById(id) {
+            for (const category in products) {
+                const product = products[category].find(p => p.id === id);
+                if (product) return product;
+            }
+            return null;
+        }
+        
+        // Mostrar detalhes do produto
+        function showProductDetails(product) {
+            if (!product) return;
+            
+            currentProduct = product;
+            
+            document.getElementById('productName').textContent = product.name;
+            document.getElementById('detailTitle').textContent = product.name;
+            document.getElementById('detailPrice').textContent = `R$ ${product.price.toFixed(2)}`;
+            document.getElementById('detailDescription').textContent = product.fullDescription;
+            
+            const featuresList = document.getElementById('detailFeatures');
+            featuresList.innerHTML = '';
+            
+            product.features.forEach(feature => {
+                const li = document.createElement('li');
+                li.innerHTML = `<i class="fas fa-check-circle"></i> ${feature}`;
+                featuresList.appendChild(li);
+            });
+            
+            toggleModal(descriptionModal, true);
+        }
+        
+        // Adicionar ao carrinho
+        function addToCart(product) {
+            if (!product) return;
+            
+            const existingItem = cart.find(item => item.id === product.id && item.type === product.type);
+            
+            if (existingItem) {
+                existingItem.quantity = (existingItem.quantity || 1) + 1;
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: 1
+                });
+            }
+            
+            saveCart();
+            updateCartCount();
+            
+            // Feedback
+            showNotification(`${product.name} adicionado ao carrinho!`);
+        }
+        
+        // Comprar agora
+        function buyNow(product) {
+            if (!product) return;
+            
+            // Criar um carrinho temporário apenas com este produto
+            cart = [{
+                ...product,
+                quantity: 1
+            }];
+            
+            saveCart();
+            updateCartCount();
+            openPaymentModal();
+        }
+        
+        // Remover item do carrinho
+        function removeFromCart(index) {
+            if (index >= 0 && index < cart.length) {
+                const removedItem = cart.splice(index, 1)[0];
+                saveCart();
+                updateCartCount();
+                updateOrderSummary();
+                showNotification(`${removedItem.name} removido do carrinho!`);
+            }
+        }
+        
+        // Salvar carrinho
+        function saveCart() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+        
+        // Atualizar contador do carrinho
+        function updateCartCount() {
+            const count = cart.reduce((total, item) => total + (item.quantity || 1), 0);
+            cartCount.textContent = count;
+            floatingCartCount.textContent = count;
+        }
+        
+        // Abrir modal de pagamento
+        function openPaymentModal() {
+            updateOrderSummary();
+            toggleModal(paymentModal, true);
+        }
+        
+        // Atualizar resumo do pedido
+        function updateOrderSummary() {
+            orderItems.innerHTML = '';
+            
+            let subtotal = 0;
+            
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * (item.quantity || 1);
+                subtotal += itemTotal;
+                
+                const itemEl = document.createElement('div');
+                itemEl.style.display = 'flex';
+                itemEl.style.justifyContent = 'space-between';
+                itemEl.style.alignItems = 'center';
+                itemEl.style.padding = '0.5rem 0';
+                itemEl.style.borderBottom = '1px solid rgba(100, 116, 139, 0.1)';
+                itemEl.innerHTML = `
+                    <div style="flex: 1;">
+                        <span>${item.name} ${item.quantity > 1 ? `(x${item.quantity})` : ''}</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="font-weight: 500;">R$ ${itemTotal.toFixed(2)}</span>
+                        <button class="cart-remove" data-index="${index}" title="Remover">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                orderItems.appendChild(itemEl);
+            });
+            
+            // Aplicar cupom
+            let discount = 0;
+            let total = subtotal;
+            
+            if (appliedCoupon) {
+                if (appliedCoupon.type === 'percent') {
+                    discount = subtotal * (appliedCoupon.value / 100);
+                } else if (appliedCoupon.type === 'fixed') {
+                    discount = appliedCoupon.value;
+                } else if (appliedCoupon.type === 'free') {
+                    discount = Math.min(subtotal, appliedCoupon.value);
+                }
+                
+                total = Math.max(0, subtotal - discount);
+                
+                const discountEl = document.createElement('div');
+                discountEl.style.display = 'flex';
+                discountEl.style.justifyContent = 'space-between';
+                discountEl.style.padding = '0.5rem 0';
+                discountEl.style.color = '#10b981';
+                discountEl.innerHTML = `
+                    <span>Desconto (${appliedCoupon.title})</span>
+                    <span>- R$ ${discount.toFixed(2)}</span>
+                `;
+                orderItems.appendChild(discountEl);
+            }
+            
+            orderTotal.textContent = `R$ ${total.toFixed(2)}`;
+            
+            // Adicionar eventos aos botões de remoção
+            document.querySelectorAll('.cart-remove').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const index = parseInt(e.target.closest('button').dataset.index);
+                    removeFromCart(index);
+                });
+            });
+        }
+        
+        // Aplicar cupom
+        function applyCoupon() {
+            const couponCode = document.getElementById('couponCode').value.trim().toUpperCase();
+            
+            if (!couponCode) {
+                showCouponMessage("Por favor, digite um cupom", "error");
+                return;
+            }
+            
+            const coupon = validCoupons[couponCode];
+            
+            if (coupon) {
+                appliedCoupon = coupon;
+                showCouponMessage(`Cupom aplicado: ${coupon.title}`, "success");
+                updateOrderSummary();
+            } else {
+                appliedCoupon = null;
+                showCouponMessage("Cupom inválido ou expirado", "error");
+                updateOrderSummary();
+            }
+        }
+        
+        // Mostrar mensagem do cupom
+        function showCouponMessage(message, type) {
+            couponMessage.textContent = message;
+            couponMessage.className = 'coupon-message';
+            couponMessage.classList.add(`coupon-${type}`);
+            couponMessage.style.display = 'block';
+        }
+        
+        // Confirmar compra
+        async function confirmPurchase() {
+            const username = document.getElementById('username').value;
+            const note = userNote.value;
+            const proofFile = proofInput.files[0];
+            
+            if (!username) {
+                showNotification("Por favor, informe seu nickname do Minecraft");
+                return;
+            }
+            
+            if (!proofFile) {
+                showNotification("Por favor, envie o comprovante de pagamento");
+                return;
+            }
+            
+            // Verificar tamanho do arquivo (limite de 5MB)
+            if (proofFile.size > 5 * 1024 * 1024) {
+                showNotification("O arquivo é muito grande (limite de 5MB)");
+                return;
+            }
+            
+            try {
+                // Enviar notificação para o Discord
+                await sendDiscordWebhook(username, note, proofFile);
+                
+                showNotification("Compra realizada com sucesso! Seu produto será entregue em breve.");
+                
+                // Limpar carrinho
+                cart = [];
+                saveCart();
+                updateCartCount();
+                
+                // Limpar comprovante
+                removeFile();
+                
+                // Fechar modal
+                toggleModal(paymentModal, false);
+            } catch (error) {
+                console.error("Erro ao enviar para o Discord:", error);
+                showNotification("Erro ao processar compra. Por favor, entre em contato com o suporte.");
+            }
+        }
+        
+        // Enviar notificação para o Discord via webhook
+        async function sendDiscordWebhook(username, note, proofFile) {
+            // Criar um FormData para enviar o arquivo
+            const formData = new FormData();
+            
+            // Adicionar dados da compra
+            let total = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+            if (appliedCoupon) {
+                if (appliedCoupon.type === 'percent') {
+                    total -= total * (appliedCoupon.value / 100);
+                } else if (appliedCoupon.type === 'fixed') {
+                    total -= appliedCoupon.value;
+                } else if (appliedCoupon.type === 'free') {
+                    total = Math.max(0, total - appliedCoupon.value);
+                }
+            }
+            
+            // Criar mensagem com os itens comprados e comandos
+            let itemsList = cart.map(item => 
+                `- ${item.name} (x${item.quantity || 1}) - R$ ${(item.price * (item.quantity || 1)).toFixed(2)}\n  Comando: \`${item.command.replace('{player}', username)}\``
+            ).join('\n');
+            
+            // Criar embed para o Discord
+            const embed = {
+                title: "📦 Nova Compra Realizada!",
+                color: 0xFFA500,
+                fields: [
+                    {
+                        name: "👤 Jogador",
+                        value: username,
+                        inline: true
+                    },
+                    {
+                        name: "🎮 Tipo de Conta",
+                        value: accountType === 'java' ? 'Java Edition' : 'Bedrock Edition',
+                        inline: true
+                    },
+                    {
+                        name: "💰 Total",
+                        value: `R$ ${total.toFixed(2)}`,
+                        inline: true
+                    },
+                    {
+                        name: "📋 Itens Comprados",
+                        value: itemsList || "Nenhum item no carrinho",
+                        inline: false
+                    },
+                    {
+                        name: "📝 Informações Adicionais",
+                        value: note || "Nenhuma informação adicional",
+                        inline: false
+                    },
+                    {
+                        name: "🛒 Status",
+                        value: "🟡 Aguardando Aprovação",
+                        inline: false
+                    }
+                ],
+                timestamp: new Date().toISOString()
+            };
+            
+            // Adicionar cupom se aplicado
+            if (appliedCoupon) {
+                embed.fields.push({
+                    name: "🎫 Cupom Aplicado",
+                    value: `${appliedCoupon.title} (-R$ ${appliedCoupon.value})`,
+                    inline: false
+                });
+            }
+            
+            // Adicionar botões de ação
+            const components = {
+                type: 1,
+                components: [
+                    {
+                        type: 2,
+                        style: 3, // Verde
+                        label: "Aprovar Compra",
+                        custom_id: "approve_purchase",
+                        emoji: {
+                            name: "✅"
+                        }
+                    },
+                    {
+                        type: 2,
+                        style: 4, // Vermelho
+                        label: "Cancelar Compra",
+                        custom_id: "cancel_purchase",
+                        emoji: {
+                            name: "❌"
+                        }
+                    }
+                ]
+            };
+            
+            // Adicionar dados ao formData
+            formData.append('payload_json', JSON.stringify({
+                content: `📦 Nova compra de ${username} (${accountType === 'java' ? 'Java' : 'Bedrock'}) - Total: R$ ${total.toFixed(2)}`,
+                embeds: [embed],
+                components: [components]
+            }));
+            formData.append('file', proofFile);
+            
+            // Enviar para o webhook do Discord
+            const response = await fetch(discordWebhookURL, {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Erro HTTP: ${response.status}`);
+            }
+        }
+        
+        // Manipular seleção de arquivo
+        function handleFileSelect() {
+            const file = proofInput.files[0];
+            if (file) {
+                // Verificar tipo de arquivo
+                const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+                if (!validTypes.includes(file.type)) {
+                    showNotification("Formato de arquivo inválido. Use JPG, PNG ou PDF.");
+                    return;
+                }
+                
+                // Verificar tamanho do arquivo (limite de 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    showNotification("O arquivo é muito grande (limite de 5MB)");
+                    return;
+                }
+                
+                // Mostrar preview
+                fileName.textContent = file.name;
+                filePreview.style.display = 'flex';
+            }
+        }
+        
+        // Remover arquivo selecionado
+        function removeFile() {
+            proofInput.value = '';
+            filePreview.style.display = 'none';
+        }
+        
+        // Mostrar notificação
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.textContent = message;
+            notification.style.position = 'fixed';
+            notification.style.bottom = '30px';
+            notification.style.left = '30px';
+            notification.style.backgroundColor = 'rgba(46, 204, 113, 0.9)';
+            notification.style.color = 'white';
+            notification.style.padding = '15px 30px';
+            notification.style.borderRadius = '10px';
+            notification.style.zIndex = '1000';
+            notification.style.boxShadow = '0 5px 15px rgba(0,0,0,0.2)';
+            notification.style.transform = 'translateY(100px)';
+            notification.style.opacity = '0';
+            notification.style.transition = 'all 0.4s';
+            
+            document.body.appendChild(notification);
+            
+            // Animação de entrada
+            setTimeout(() => {
+                notification.style.transform = 'translateY(0)';
+                notification.style.opacity = '1';
+            }, 10);
+            
+            // Remover após 3 segundos
+            setTimeout(() => {
+                notification.style.transform = 'translateY(100px)';
+                notification.style.opacity = '0';
+                
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 400);
+            }, 3000);
+        }
+        
+        // Rolar para seção
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+        
+        // Alternar modal
+        function toggleModal(modal, show) {
+            modal.classList.toggle('active', show);
+        }
+        
+        // Inicializar quando o DOM estiver carregado
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
 </html>

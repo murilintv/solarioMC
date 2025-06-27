@@ -55,6 +55,58 @@
             font-family: 'Minecraft', sans-serif;
         }
         
+        /* Server Info Bar */
+        .server-info-bar {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            border-bottom: 1px solid rgba(255, 165, 0, 0.1);
+        }
+        
+        .server-ips {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .server-ips span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+        
+        .copy-ip {
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            cursor: pointer;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            padding: 0.2rem;
+        }
+        
+        .copy-ip:hover {
+            color: var(--secondary);
+        }
+        
+        .server-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            box-shadow: 0 0 5px rgba(34, 197, 94, 0.5);
+        }
+        
         /* Header Styles */
         header {
             background: rgba(10, 25, 47, 0.95);
@@ -1340,6 +1392,17 @@
         }
         
         @media (max-width: 768px) {
+            .server-info-bar {
+                flex-direction: column;
+                gap: 0.8rem;
+                padding: 0.8rem;
+            }
+            
+            .server-ips {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
             header {
                 flex-direction: column;
                 gap: 1.2rem;
@@ -1525,6 +1588,18 @@
     </style>
 </head>
 <body>
+    <!-- Server Info Bar -->
+    <div class="server-info-bar">
+        <div class="server-ips">
+            <span>Java: <span id="java-ip">solariomc.shop</span> <button class="copy-ip" data-ip="solariomc.shop"><i class="fas fa-copy"></i></button></span>
+            <span>Bedrock: <span id="bedrock-ip">solariomc.shop:25567</span> <button class="copy-ip" data-ip="solariomc.shop:25567"><i class="fas fa-copy"></i></button></span>
+        </div>
+        <div class="server-status">
+            <span class="online-dot"></span>
+            <span>Jogadores Online: <span id="player-count">0</span></span>
+        </div>
+    </div>
+
     <!-- Header -->
     <header>
         <div class="logo-container">
@@ -3075,6 +3150,7 @@
         const fileName = document.getElementById('fileName');
         const removeFileBtn = document.getElementById('removeFileBtn');
         const userNote = document.getElementById('userNote');
+        const playerCountElement = document.getElementById('player-count');
         
         // Chave PIX
         const pixKey = "00020126600014br.gov.bcb.pix0114+55849913674160220dnstrhqrhahatjtahhjj5204000053039865802BR5924MURILO MEDEIROS DE PAIVA6009Sao Paulo62190515abatbarbrarabar63040A85";
@@ -3154,6 +3230,20 @@
             proofInput.addEventListener('change', handleFileSelect);
             removeFileBtn.addEventListener('click', removeFile);
             
+            // Eventos para copiar IP
+            document.querySelectorAll('.copy-ip').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const ip = button.dataset.ip;
+                    navigator.clipboard.writeText(ip)
+                        .then(() => {
+                            showNotification(`IP copiado: ${ip}`);
+                        })
+                        .catch(err => {
+                            console.error('Erro ao copiar IP:', err);
+                        });
+                });
+            });
+            
             // Gerar QR Code PIX
             new QRCode(pixQrcode, {
                 text: pixKey,
@@ -3163,6 +3253,17 @@
                 colorLight: "#ffffff",
                 correctLevel: QRCode.CorrectLevel.H
             });
+            
+            // Atualizar contador de jogadores (simulado)
+            updatePlayerCount();
+            setInterval(updatePlayerCount, 30000);
+        }
+        
+        // Atualizar contador de jogadores (simulado)
+        function updatePlayerCount() {
+            // Simulação: número aleatório entre 50 e 200
+            const playerCount = Math.floor(Math.random() * 151) + 50;
+            playerCountElement.textContent = playerCount;
         }
         
         // Carregar informações da conta
@@ -3435,6 +3536,9 @@
         
         // Abrir modal de pagamento
         function openPaymentModal() {
+            // Preencher o nickname automaticamente
+            document.getElementById('username').value = accountNickname;
+            
             updateOrderSummary();
             toggleModal(paymentModal, true);
         }
